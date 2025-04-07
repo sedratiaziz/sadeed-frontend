@@ -1,6 +1,12 @@
+import React from 'react'
 import {useContext,useEffect} from 'react'
 import { authContext } from '../context/AuthContext'
 import axios from 'axios'
+
+import '../../public/styles/Homepage.css'
+
+const pages = ['Products', 'Pricing', 'Blog'];
+const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function Homepage() {
   // useContext(): allows me to consume the context
@@ -13,9 +19,10 @@ function Homepage() {
   }
 
   callProtectedRoute()
+   
   return (
     <div>
-      Homepage
+      homepage
     </div>
   )
 }
