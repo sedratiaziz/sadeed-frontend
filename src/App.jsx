@@ -14,7 +14,7 @@ function App() {
     <>
       <Navbar/>
       <Routes>
-        {/* removed validation temporarily for development */}
+        {/* removed validation temporarily to develop the UI without limitations, un-comment it when done */}
         <Route path="/" element={<Homepage/>} />
         <Route path="/signup" element={<Signup/>} />
         <Route path="/login" element={<Login/>} />

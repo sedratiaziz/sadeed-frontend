@@ -12,12 +12,13 @@ function Navbar() {
       <ul>
         <Link to="/"><li>Homepage</li></Link>
         {user && (
-
           <>
           <li>Welcome {user.username}</li>
           <button onClick={logout}>Logout</button>
           </>
         )}
+
+        
         {!user && (
           <>
           <Link to='/login'><li>Login</li></Link>
