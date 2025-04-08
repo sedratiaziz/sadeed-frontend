@@ -24,7 +24,7 @@ function Homepage() {
       name: 'name 1',
       status: 'status 1',
       description: 'blah blah blah blah blah blah blah blah blah',
-      link: '/login',
+      link: '/concept-details',
     },
     {
       id: 1,
@@ -61,7 +61,7 @@ function Homepage() {
                       <div>
                         {data.map((oneData)=>
                           <Link to={oneData.link}>
-                            <Card key={oneData.id} sx={{ minWidth: 275 }}>
+                            <Card key={oneData.id} sx={{ minWidth: 275, marginTop: 3, marginBottom: 3 }}>
                                 <CardContent>                              
                                   <Typography variant="h5" component="div">
                                     {oneData.name}
