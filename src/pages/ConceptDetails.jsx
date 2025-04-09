@@ -38,23 +38,23 @@ function ConceptDetails() {
   let [data2, setData2] = useState([
     {
       id: 0,
-      name: 'name 1',
-      status: 'status 1',
-      description: 'blah blah blah blah blah blah blah blah blah',
+      name: 'Manager Ebrahim',
+      status: 'Approved',
+      description: 'very good idea',
       link: '/concept-details',
     },
     {
       id: 1,
-      name: 'name 2',
-      status: 'status 2',
-      description: 'blah blah blah blah blah blah blah blah blah',
+      name: 'Manager Adel',
+      status: 'DisApproved',
+      description: 'Not good enough, needs analyis',
       link: '/',
     },
     {
       id: 2,
-      name: 'name 2',
-      status: 'status 2',
-      description: 'blah blah blah blah blah blah blah blah blah',
+      name: 'Manager Abdulaziz',
+      status: 'Approved',
+      description: 'Amazing idea',
       link: '/',
     },
   ])
@@ -93,7 +93,7 @@ function ConceptDetails() {
                 </Typography>
                 <Box component="div" sx={{ display: 'flex', alignItems: 'center', p: 2, border: '1px dashed grey' }}>
                     <Typography variant="h5" component="div">
-                        names of managers:
+                        Selected Managers:
                     </Typography>
                     <Button
                         id="demo-positioned-button"
@@ -119,7 +119,7 @@ function ConceptDetails() {
                         horizontal: 'left',
                         }}
                     >             
-                    {data.map((oneData)=>
+                    {data2.map((oneData)=>
                         <MenuItem key={oneData.id} onClick={handleClose} sx={{paddingTop: '15px', paddingBottom: '15px'}}>
                             <Typography sx={{fontWeight: 700}}>                            
                                 <Typography>
@@ -146,17 +146,57 @@ function ConceptDetails() {
                 </Box>
                 <Box component="div" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', p: 2, border: '1px dashed grey' }}>
                     <Typography variant="h5" component="div">
-                        Status: {voteResult}
+                        Status: Approved
                     </Typography>
-                    <FormGroup sx={{display: 'flex', flexDirection: 'column'}}>
+                    <Button
+                        id="demo-positioned-button"
+                        aria-controls={open ? 'demo-positioned-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        onClick={handleClick}
+                    >
+                        View
+                    </Button>
+                    <Menu
+                        id="demo-positioned-menu"
+                        aria-labelledby="demo-positioned-button"
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleClose}
+                        anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                        }}
+                        transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                        }}
+                    >             
+                    {data2.map((oneData)=>
+                        <MenuItem key={oneData.id} onClick={handleClose} sx={{paddingTop: '15px', paddingBottom: '15px'}}>
+                            <Typography sx={{fontWeight: 700}}>                            
+                                <Typography>
+                                    {oneData.name} 
+                                </Typography>                                      
+                                <Typography>
+                                    {oneData.status} 
+                                </Typography>                                
+                                <Typography>
+                                    {oneData.description} 
+                                </Typography>                                                                        
+                            </Typography>                                                               
+                        </MenuItem>
+                    )}                                    
+                    </Menu>
+                    {/* <FormGroup sx={{display: 'flex', flexDirection: 'column'}}>
                         {data2.map((oneData)=>
                             <FormControlLabel key={oneData.id} control={<Checkbox onChange={handleChange} />} label={oneData.name} />
                         )} 
-                        {/* 
+                        
                         How to know if the input is checked or not
                         How to know how MANY inputs are checked
-                        */}
-                    </FormGroup>
+                       
+                    </FormGroup> */}
                 </Box>                
             </Box>
 
