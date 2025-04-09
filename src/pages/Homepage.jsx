@@ -85,7 +85,7 @@ function Homepage() {
                   </div> 
 
                   <div className=''>
-                    <Link to='/login'>                    
+                    <Link to='/add-concept'>                    
                       <Button size='large' variant="contained" 
                             sx={{ 
                               '&:focus': { outline: 'none' },
