@@ -20,15 +20,17 @@ function App() {
       <Navbar/>
       <Routes>
         {/* removed validation temporarily to develop the UI without limitations, un-comment it when done */}
-        <Route path="/" element={<Homepage/>} />
+        {/* <Route path="/" element={<Homepage/>} />
         <Route path="/concept-details" element={<ConceptDetails/>} />
         <Route path="/add-concept" element={<AddConcept/>} />
         <Route path="/signup" element={<Signup/>} />
-        <Route path="/login" element={<Login/>} />
+        <Route path="/login" element={<Login/>} /> */}
 
-        {/* <Route path="/" element={<ValidateIsLoggedIn><Homepage/></ValidateIsLoggedIn>}/>
+        <Route path="/" element={<ValidateIsLoggedIn><Homepage/></ValidateIsLoggedIn>}/>
+        <Route path="/concept-details" element={<ValidateIsLoggedIn><ConceptDetails/></ValidateIsLoggedIn>} />
+        <Route path="/add-concept" element={<ValidateIsLoggedIn><AddConcept/></ValidateIsLoggedIn>} />
         <Route path="/signup" element={<ValidateIsLoggedOut><Signup/></ValidateIsLoggedOut>}/>
-        <Route path="/login" element={<ValidateIsLoggedOut><Login/></ValidateIsLoggedOut>}/> */}
+        <Route path="/login" element={<ValidateIsLoggedOut><Login/></ValidateIsLoggedOut>}/>
       </Routes>
     </>
   )

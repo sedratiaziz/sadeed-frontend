@@ -9,12 +9,18 @@ import Button from '@mui/material/Button';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import { authContext } from '../context/AuthContext';
 
 function ConceptDetails() {
+    const {user} = useContext(authContext)
+
     let [status, setStatus] = useState(true)
     let [currentStatus, setCurrentStatus] = useState(true)
     let [voteCount, setVoteCount] = useState(0)
     let [voteResult, setVoteResult] = useState('')
+
+    let [approve, setApprove] = useState(false)
+    let [disApprove, setDisapprove] = useState(false)
 
     // dummy data for presentation:
   let [data, setData] = useState([
@@ -60,17 +66,26 @@ function ConceptDetails() {
   ])
 
   
-  const handleChange = ()=> {
-    setStatus(currentStatus => !currentStatus)
+//   const handleChange = ()=> {
+//     setStatus(currentStatus => !currentStatus)
     
-    if (status === true) {
-        setVoteCount(voteCount + 1)
-    } 
+//     if (status === true) {
+//         setVoteCount(voteCount + 1)
+//     } 
     
-    console.log(status)
-    console.log(voteCount)
-  }
+//     console.log(status)
+//     console.log(voteCount)
+//   }
 
+const handleApprove = () => {
+    setApprove(true)
+    setDisapprove(false)
+}
+
+const handleDisapprove = () => {
+    setDisapprove(true)
+    setApprove(false)
+}
 
 //  MUI
     const [anchorEl, setAnchorEl] = useState(null);
@@ -140,11 +155,22 @@ function ConceptDetails() {
             
             <Box component='div' sx={{ p: 2, border: '1px dashed grey' }}>
                 <Box component="div" sx={{ display: 'flex', alignItems: 'center', p: 2, border: '1px dashed grey' }}>
+                    { user.role === "admin" &&
                     <Typography variant="h2" component="div">
                         Team
                     </Typography>
+                    }
+
+                    { user.role === "manager" &&
+                    <Typography variant="h2" component="div">
+                        Decision
+                    </Typography>
+                    }
                 </Box>
+                
                 <Box component="div" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', p: 2, border: '1px dashed grey' }}>
+                    { user.role === "admin" && 
+                    <Box component="div" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', p: 2, border: '1px dashed grey' }}>
                     <Typography variant="h5" component="div">
                         Status: Approved
                     </Typography>
@@ -171,32 +197,35 @@ function ConceptDetails() {
                         vertical: 'top',
                         horizontal: 'left',
                         }}
-                    >             
-                    {data2.map((oneData)=>
-                        <MenuItem key={oneData.id} onClick={handleClose} sx={{paddingTop: '15px', paddingBottom: '15px'}}>
-                            <Typography sx={{fontWeight: 700}}>                            
-                                <Typography>
-                                    {oneData.name} 
-                                </Typography>                                      
-                                <Typography>
-                                    {oneData.status} 
-                                </Typography>                                
-                                <Typography>
-                                    {oneData.description} 
-                                </Typography>                                                                        
-                            </Typography>                                                               
-                        </MenuItem>
+                    >           
+
+                    {                    
+                        data2.map((oneData)=>
+                            <MenuItem key={oneData.id} onClick={handleClose} sx={{paddingTop: '15px', paddingBottom: '15px'}}>
+                                <Typography sx={{fontWeight: 700}}>                            
+                                    <Typography>
+                                        {oneData.name} 
+                                    </Typography>                                      
+                                    <Typography>
+                                        {oneData.status} 
+                                    </Typography>                                
+                                    <Typography>
+                                        {oneData.description} 
+                                    </Typography>                                                                        
+                                </Typography>                                                               
+                            </MenuItem>
                     )}                                    
-                    </Menu>
-                    {/* <FormGroup sx={{display: 'flex', flexDirection: 'column'}}>
-                        {data2.map((oneData)=>
-                            <FormControlLabel key={oneData.id} control={<Checkbox onChange={handleChange} />} label={oneData.name} />
-                        )} 
-                        
-                        How to know if the input is checked or not
-                        How to know how MANY inputs are checked
-                       
-                    </FormGroup> */}
+                    
+                    </Menu> 
+                    </Box>
+                    }
+
+                    {user.role === "manager" &&  
+                    <FormGroup sx={{display: 'flex', flexDirection: 'row'}}>                        
+                            <FormControlLabel control={<Checkbox onChange={handleApprove} checked={approve} />} label="Approve" />                                                                        
+                            <FormControlLabel control={<Checkbox onChange={handleDisapprove} checked={disApprove} />} label="Disapprove" />                                                                        
+                    </FormGroup> }
+
                 </Box>                
             </Box>
 

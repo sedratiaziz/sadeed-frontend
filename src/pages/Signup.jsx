@@ -4,9 +4,12 @@ import { useNavigate } from 'react-router'
 
 function Signup() {
 
+  const role = ["admin", "manager", "employee"]
+
     const [formData, setFormData] = useState({
         username:"",
-        password:""
+        password:"",
+        role: "admin",
     })
 
     const navigate = useNavigate()
@@ -47,6 +50,21 @@ function Signup() {
          value={formData.password}
          onChange={handleChange}
           />
+        
+        <label htmlFor="role">Role:</label>
+        <select
+         type="text"
+         name='role'
+         id='role'
+         value={formData.role}
+         onChange={handleChange}
+        >
+          {role.map((oneRole)=>
+            <option value={oneRole}>
+              {oneRole}
+            </option>
+          )}
+        </select>
 
           <button>Submit</button>
       </form>

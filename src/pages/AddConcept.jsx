@@ -51,9 +51,10 @@ function AddConcept() {
     const navigate = useNavigate()
 
     let [formData, setFormData] = useState({
-        teamName: '',
+        title: '',
         managers: [],
         operationals: [],
+        description: '',
     })
 
     let [checkboxState, setCheckboxState] = useState([])
@@ -73,9 +74,10 @@ function AddConcept() {
 
     navigate('/')
     setFormData({
-        teamName: '',
+        title: '',
         managers: [],
         operationals: [],
+        description: '',
     })
 }
 
@@ -106,7 +108,7 @@ console.log(formData)
                         <Typography variant="h5" component="div">
                                 Title: 
                         </Typography>
-                        <TextField required onChange={handleChange} name='teamName' value={formData.teamName} label="Your Concept's Title" variant="filled" />
+                        <TextField required onChange={handleChange} name='title' value={formData.title} label="Your Concept's Title" variant="filled" />
                     </Box>
 
                     <Box component="div" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', p: 2, border: '1px dashed grey' }}>
@@ -135,7 +137,7 @@ console.log(formData)
                         <Typography variant="h5" component="div">
                                 Description: 
                         </Typography>
-                        <TextField onChange={handleChange} name='teamName' value={formData.teamName} label="Description (optional)" variant="filled" />
+                        <TextField onChange={handleChange} name='description' value={formData.description} label="Description (optional)" variant="filled" />
                     </Box>    
 
                     <Button type='submit' size='large' variant="contained" 
