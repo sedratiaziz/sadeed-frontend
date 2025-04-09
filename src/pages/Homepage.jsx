@@ -3,8 +3,7 @@ import { authContext } from '../context/AuthContext'
 import { Link } from "react-router"
 import axios from 'axios'
 
-  // I currently commented line 7 since i disabled the login validatores in App.jsx, un-comment it when validators are re-enabled  
-  // const {user} = useContext(authContext)
+ 
 
 import '../../public/styles/Homepage.css'
 
@@ -16,6 +15,8 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 function Homepage() {
+
+  const {user} = useContext(authContext)
 
   // dummy data for presentation:
   let [data, setData] = useState([
@@ -51,7 +52,8 @@ function Homepage() {
         <section className="homepage-section">
           <div className="container">                  
                   <div className="">       
-                      <h1>Welcome, Name!</h1>              
+                      <h1>Welcome, {user.username}!</h1>              
+                      <h1>Your role is: {user.role}</h1>              
                   </div>
                   
                   <div className=""> 
@@ -83,7 +85,9 @@ function Homepage() {
                         )}                  
                       </div>                        
                   </div> 
-
+                  
+                  {user.role === "admin" && 
+                  
                   <div className=''>
                     <Link to='/add-concept'>                    
                       <Button size='large' variant="contained" 
@@ -95,6 +99,7 @@ function Homepage() {
                       >Add New Concept</Button>
                     </Link>
                   </div>
+                  }
           </div>
         </section>
   )
