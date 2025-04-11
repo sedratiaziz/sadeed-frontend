@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router'
+import { useContext } from 'react';
+import { authContext } from '../context/AuthContext'
 import axios from 'axios';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -16,6 +18,8 @@ import Button from '@mui/material/Button';
 
 
 function AddConcept() {
+      const {user} = useContext(authContext)    
+
     const darkTheme = createTheme({
         palette: {
           mode: 'dark',
@@ -27,28 +31,74 @@ function AddConcept() {
           mode: 'light',
         },
       });
+                
+      // dummy data for presentation:
+      let [data, setData] = useState([
+        {
+          id: "645f6a8e7f1d7c2b3e4a5d8c", // Use valid MongoDB ObjectId strings
+          name: 'name 1',
+          status: 'status 1',
+          description: 'blah blah blah blah blah blah blah blah blah',
+          link: '/concept-details',
+        },
+        {
+          id: "645f6a8e7f1d7c2b3e4a5d8d", // Use valid MongoDB ObjectId strings
+          name: 'name 2',
+          status: 'status 2',
+          description: 'blah blah blah blah blah blah blah blah blah',
+          link: '/',
+        }
+      ])
+        
+        const token = localStorage.getItem('token'); // or sessionStorage or from your auth context
+        
+        const navigate = useNavigate()
 
-      const [checkedState, setCheckedState] = useState([]);
 
-        // dummy data for presentation:
-        let [data, setData] = useState([
-          {
-            id: 0,
-            name: 'name 1',
-            status: 'status 1',
-            description: 'blah blah blah blah blah blah blah blah blah',
-            link: '/concept-details',
-          },
-          {
-            id: 1,
-            name: 'name 2',
-            status: 'status 2',
-            description: 'blah blah blah blah blah blah blah blah blah',
-            link: '/',
-          }
-        ])
+        
+    // let [managers, setManagers] = useState([])
+    
+//     async function populateManagers() {
+//       let allManagers = await axios.get("http://localhost:3000/managers", {headers:{Authorization:`Bearer ${token}`}})
 
-    const navigate = useNavigate()
+// console.log(allManagers.data)
+//       setManagers(...managers, allManagers)
+//     }
+    // populateManagers()
+    
+
+
+// For Managers
+const handleManagerCheckboxChange = (event, managerId) => {
+  if (event.target.checked) {
+    setFormData(prev => ({
+      ...prev,
+      managers: [...prev.managers, managerId]
+    }));
+  } else {
+    setFormData(prev => ({
+      ...prev,
+      managers: prev.managers.filter(id => id !== managerId)
+    }));
+  }
+};
+
+// Same for operationals
+const handleOperationalCheckboxChange = (event, operationalId) => {
+  if (event.target.checked) {
+    setFormData(prev => ({
+      ...prev,
+      operationals: [...prev.operationals, operationalId]
+    }));
+  } else {
+    setFormData(prev => ({
+      ...prev,
+      operationals: prev.operationals.filter(id => id !== operationalId)
+    }));
+  }
+};
+
+
 
     let [formData, setFormData] = useState({
         title: '',
@@ -57,29 +107,58 @@ function AddConcept() {
         description: '',
     })
 
-    let [checkboxState, setCheckboxState] = useState([])
 
     const handleChange = (event) => {
         setFormData({...formData, [event.target.name]:event.target.value})
-    }
+    }   
 
-    const handleCheckbox = (event) => {
-        setCheckboxState({...checkboxState, [event.target.name]:event.target.value})
-    }
+//     async function handleSubmit(event) {
+//     event.preventDefault()
 
-    async function handleSubmit(event) {
-    event.preventDefault()
+//     await axios.post(`http://localhost:3000/`, formData, {headers:{Authorization:`Bearer ${token}`}})
 
-    await axios.post(`http://localhost:3000/concept`, formData)
+//     navigate('/')
+//     setFormData({
+//         title: '',
+//         managers: [],
+//         operationals: [],
+//         description: '',
+//     })
+// }
 
-    navigate('/')
+
+
+
+async function handleSubmit(event) {
+  event.preventDefault()
+  
+  const userId = user._id;
+  
+  const conceptData = {
+    owner: userId,
+    title: formData.title,
+    selectedManagers: formData.managers, // Now these contain valid ObjectId strings
+    selectedOperationals: formData.operationals,
+    description: formData.description,
+  };
+  
+  try {
+    await axios.post(`http://localhost:3000/`, conceptData, {
+      headers: {Authorization: `Bearer ${token}`}
+    });
+    
+    navigate('/');
     setFormData({
-        title: '',
-        managers: [],
-        operationals: [],
-        description: '',
-    })
+      title: '',
+      managers: [],
+      operationals: [],
+      description: '',
+    });
+  } catch (error) {
+    console.error("Error details:", error.response?.data || error.message);
+  }
 }
+
 
     
 //  MUI
@@ -115,9 +194,10 @@ console.log(formData)
                         <Typography variant="h5" component="div">
                             Select Managers: 
                         </Typography>
-                        <FormGroup sx={{display: 'flex', flexDirection: 'column'}}>
+                        <FormGroup value={formData.managers} name='managers' sx={{display: 'flex', flexDirection: 'column'}}>
                             {data.map((oneData)=>
-                                <FormControlLabel key={oneData.id} control={<Checkbox name='managers' onChange={handleCheckbox} />} label={oneData.name} />
+                                <FormControlLabel key={oneData.id} control={<Checkbox onChange={(e) => handleManagerCheckboxChange(e, oneData.id)}
+                                checked={formData.managers.includes(oneData.id)} />} label={oneData.name} />
                             )} 
                         </FormGroup>
                     </Box>   
@@ -126,9 +206,10 @@ console.log(formData)
                         <Typography variant="h5" component="div">
                             Select Operationals: 
                         </Typography>
-                        <FormGroup sx={{display: 'flex', flexDirection: 'column'}}>
+                        <FormGroup value={formData.operationals} name="operationals" sx={{display: 'flex', flexDirection: 'column'}}>
                             {data.map((oneData)=>
-                                <FormControlLabel key={oneData.id} control={<Checkbox onChange={handleChange} />} label={oneData.name} />
+                                <FormControlLabel key={oneData.id} control={<Checkbox onChange={(e) => handleOperationalCheckboxChange(e, oneData.id)}
+                                checked={formData.operationals.includes(oneData.id)} />} label={oneData.name} />
                             )} 
                         </FormGroup>
                     </Box>  

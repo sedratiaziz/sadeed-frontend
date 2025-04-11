@@ -17,36 +17,38 @@ import Typography from '@mui/material/Typography';
 function Homepage() {
 
   const {user} = useContext(authContext)
+  const token = localStorage.getItem('token'); // or sessionStorage or from your auth context
 
-  // dummy data for presentation:
-  let [data, setData] = useState([
-    {
-      id: 0,
-      name: 'name 1',
-      status: 'status 1',
-      description: 'blah blah blah blah blah blah blah blah blah',
-      link: '/concept-details',
-    },
-    {
-      id: 1,
-      name: 'name 2',
-      status: 'status 2',
-      description: 'blah blah blah blah blah blah blah blah blah',
-      link: '/',
-    }
-  ])
   
-  // Actual data that will be used: 
-  // let [concepts, setConcepts] = useState([])
 
+  let [concepts, setConcepts] = useState([])
+
+
+  
+  async function getAllConcepts() {
+    try {
+      const fetchedConcepts = await axios.get("http://localhost:3000/", {headers: {Authorization: `Bearer ${token}`}})
+      setConcepts(fetchedConcepts.data)      
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  
+  useEffect(()=>{
+    getAllConcepts()
+  }, [])
+  
+  
   // sending request to protected route that needs a token
   async function callProtectedRoute(){
     const token = localStorage.getItem("token")
     const response= await axios.get(`${import.meta.env.VITE_BACKEND_URL}/test-jwt/checkout`,{headers:{Authorization:`Bearer ${token}`}})
     console.log(response.data)
   }
-
   callProtectedRoute()
+
+
+
    
   return (
         <section className="homepage-section">
@@ -61,16 +63,16 @@ function Homepage() {
                         <h2>Your Concepts:</h2>
                       </div>                    
                       <div>
-                        {data.map((oneData)=>
-                          <Link to={oneData.link}>
-                            <Card key={oneData.id} sx={{ minWidth: 275, marginTop: 3, marginBottom: 3 }}>
+                        {concepts.map((concept)=>
+                          <Link >
+                            <Card key={concept._id} sx={{ minWidth: 275, marginTop: 3, marginBottom: 3 }}>
                                 <CardContent>                              
                                   <Typography variant="h5" component="div">
-                                    {oneData.name}
+                                    {concept.title}
                                   </Typography>
-                                  <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>{oneData.status}</Typography>
+                                  <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>{concept.status}</Typography>
                                   <Typography variant="body2">
-                                    {oneData.description}                                
+                                    {concept.description}                                
                                   </Typography>
                                 </CardContent>
                                 <CardActions>

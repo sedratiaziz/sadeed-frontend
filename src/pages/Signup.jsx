@@ -35,6 +35,7 @@ function Signup() {
       <form onSubmit={handleSubmit}>
         <label htmlFor="username">Username:</label>
         <input
+         required
          type="text"
          name='username'
          id='username'
@@ -44,6 +45,7 @@ function Signup() {
 
         <label htmlFor="password">Password:</label>
         <input
+        required
          type="password"
          name='password'
          id='password'
@@ -53,6 +55,7 @@ function Signup() {
         
         <label htmlFor="role">Role:</label>
         <select
+        required
          type="text"
          name='role'
          id='role'
