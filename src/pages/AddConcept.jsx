@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { useContext } from 'react';
 import { authContext } from '../context/AuthContext'
@@ -25,47 +25,56 @@ function AddConcept() {
           mode: 'dark',
         },
       });
-    
     const lightTheme = createTheme({
         palette: {
           mode: 'light',
         },
       });
                 
-      // dummy data for presentation:
-      let [data, setData] = useState([
-        {
-          id: "645f6a8e7f1d7c2b3e4a5d8c", // Use valid MongoDB ObjectId strings
-          name: 'name 1',
-          status: 'status 1',
-          description: 'blah blah blah blah blah blah blah blah blah',
-          link: '/concept-details',
-        },
-        {
-          id: "645f6a8e7f1d7c2b3e4a5d8d", // Use valid MongoDB ObjectId strings
-          name: 'name 2',
-          status: 'status 2',
-          description: 'blah blah blah blah blah blah blah blah blah',
-          link: '/',
-        }
-      ])
+   
+
         
-        const token = localStorage.getItem('token'); // or sessionStorage or from your auth context
-        
+        const token = localStorage.getItem('token'); // or sessionStorage or from your auth context        
         const navigate = useNavigate()
 
+    
 
+        const [managers, setManagers] = useState([
+            {}
+        ])  
+        const [operationals, selectedOperationals] = useState([
+            {}
+        ])  
+
+
+
+        async function getAllManagers() {
+          try {            
+            const fetchedManagers = await axios.get("http://localhost:3000/managers/", {headers: {Authorization: `Bearer ${token}`}})
+              setManagers(fetchedManagers.data) 
+                       
+          } catch (error) {
+            console.log(error)
+          }  
+        }
+         useEffect(()=>{
+            getAllManagers()
+         }, [])         
         
-    // let [managers, setManagers] = useState([])
-    
-//     async function populateManagers() {
-//       let allManagers = await axios.get("http://localhost:3000/managers", {headers:{Authorization:`Bearer ${token}`}})
+        
 
-// console.log(allManagers.data)
-//       setManagers(...managers, allManagers)
-//     }
-    // populateManagers()
-    
+         async function getAllOperationals() {
+          try {            
+            const fetchedOperationals = await axios.get("http://localhost:3000/operationals/", {headers: {Authorization: `Bearer ${token}`}})
+              selectedOperationals(fetchedOperationals.data) 
+                       
+          } catch (error) {
+            console.log(error)
+          }  
+        }
+         useEffect(()=>{
+            getAllOperationals()
+         }, [])         
 
 
 // For Managers
@@ -83,7 +92,7 @@ const handleManagerCheckboxChange = (event, managerId) => {
   }
 };
 
-// Same for operationals
+// for operationals
 const handleOperationalCheckboxChange = (event, operationalId) => {
   if (event.target.checked) {
     setFormData(prev => ({
@@ -132,31 +141,20 @@ const handleOperationalCheckboxChange = (event, operationalId) => {
 async function handleSubmit(event) {
   event.preventDefault()
   
-  const userId = user._id;
-  
-  const conceptData = {
-    owner: userId,
-    title: formData.title,
-    selectedManagers: formData.managers, // Now these contain valid ObjectId strings
-    selectedOperationals: formData.operationals,
-    description: formData.description,
-  };
-  
   try {
-    await axios.post(`http://localhost:3000/`, conceptData, {
-      headers: {Authorization: `Bearer ${token}`}
-    });
-    
-    navigate('/');
-    setFormData({
-      title: '',
-      managers: [],
-      operationals: [],
-      description: '',
-    });
+    await axios.post(`http://localhost:3000/`, formData, {headers: {Authorization: `Bearer ${token}`}});            
   } catch (error) {
     console.error("Error details:", error.response?.data || error.message);
   }
+  
+  navigate('/');
+  
+  setFormData({
+    title: '',
+    managers: [],
+    operationals: [],
+    description: '',
+  });
 }
 
 
@@ -171,8 +169,6 @@ async function handleSubmit(event) {
     setAnchorEl(null);
   };
 //   MUI
-
-console.log(formData)
 
 
   return (
@@ -195,9 +191,8 @@ console.log(formData)
                             Select Managers: 
                         </Typography>
                         <FormGroup value={formData.managers} name='managers' sx={{display: 'flex', flexDirection: 'column'}}>
-                            {data.map((oneData)=>
-                                <FormControlLabel key={oneData.id} control={<Checkbox onChange={(e) => handleManagerCheckboxChange(e, oneData.id)}
-                                checked={formData.managers.includes(oneData.id)} />} label={oneData.name} />
+                            {managers.map((manager)=>
+                                <FormControlLabel key={manager._id} control={<Checkbox onChange={(e)=>handleManagerCheckboxChange(e, manager._id)} checked={formData.managers.includes(manager._id)} />} label={manager.username} />
                             )} 
                         </FormGroup>
                     </Box>   
@@ -207,9 +202,8 @@ console.log(formData)
                             Select Operationals: 
                         </Typography>
                         <FormGroup value={formData.operationals} name="operationals" sx={{display: 'flex', flexDirection: 'column'}}>
-                            {data.map((oneData)=>
-                                <FormControlLabel key={oneData.id} control={<Checkbox onChange={(e) => handleOperationalCheckboxChange(e, oneData.id)}
-                                checked={formData.operationals.includes(oneData.id)} />} label={oneData.name} />
+                            {operationals.map((operational)=>
+                                <FormControlLabel key={operational.id} control={<Checkbox onChange={(e)=>handleOperationalCheckboxChange(e, operational._id)} checked={formData.operationals.includes(operational._id)} />} label={operational.username} />
                             )} 
                         </FormGroup>
                     </Box>  
