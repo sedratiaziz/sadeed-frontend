@@ -1,5 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
+import { useContext } from 'react';
+import { authContext } from '../context/AuthContext'
 import axios from 'axios';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -16,39 +18,96 @@ import Button from '@mui/material/Button';
 
 
 function AddConcept() {
+      const {user} = useContext(authContext)    
+
     const darkTheme = createTheme({
         palette: {
           mode: 'dark',
         },
       });
-    
     const lightTheme = createTheme({
         palette: {
           mode: 'light',
         },
       });
+                
+   
 
-      const [checkedState, setCheckedState] = useState([]);
+        
+        const token = localStorage.getItem('token'); // or sessionStorage or from your auth context        
+        const navigate = useNavigate()
 
-        // dummy data for presentation:
-        let [data, setData] = useState([
-          {
-            id: 0,
-            name: 'name 1',
-            status: 'status 1',
-            description: 'blah blah blah blah blah blah blah blah blah',
-            link: '/concept-details',
-          },
-          {
-            id: 1,
-            name: 'name 2',
-            status: 'status 2',
-            description: 'blah blah blah blah blah blah blah blah blah',
-            link: '/',
-          }
-        ])
+    
 
-    const navigate = useNavigate()
+        const [managers, setManagers] = useState([
+            {}
+        ])  
+        const [operationals, selectedOperationals] = useState([
+            {}
+        ])  
+
+
+
+        async function getAllManagers() {
+          try {            
+            const fetchedManagers = await axios.get("http://localhost:3000/managers/", {headers: {Authorization: `Bearer ${token}`}})
+              setManagers(fetchedManagers.data) 
+                       
+          } catch (error) {
+            console.log(error)
+          }  
+        }
+         useEffect(()=>{
+            getAllManagers()
+         }, [])         
+        
+        
+
+         async function getAllOperationals() {
+          try {            
+            const fetchedOperationals = await axios.get("http://localhost:3000/operationals/", {headers: {Authorization: `Bearer ${token}`}})
+              selectedOperationals(fetchedOperationals.data) 
+                       
+          } catch (error) {
+            console.log(error)
+          }  
+        }
+         useEffect(()=>{
+            getAllOperationals()
+         }, [])         
+
+
+// For Managers
+const handleManagerCheckboxChange = (event, managerId) => {
+  if (event.target.checked) {
+    setFormData(prev => ({
+      ...prev,
+      managers: [...prev.managers, managerId]
+    }));
+  } else {
+    setFormData(prev => ({
+      ...prev,
+      managers: prev.managers.filter(id => id !== managerId)
+    }));
+  }
+};
+
+// for operationals
+const handleOperationalCheckboxChange = (event, operationalId) => {
+  if (event.target.checked) {
+    setFormData(prev => ({
+      ...prev,
+      operationals: [...prev.operationals, operationalId]
+    }));
+  } else {
+    setFormData(prev => ({
+      ...prev,
+      operationals: prev.operationals.filter(id => id !== operationalId)
+    }));
+  }
+};
+
+
 
     let [formData, setFormData] = useState({
         title: '',
@@ -57,29 +116,47 @@ function AddConcept() {
         description: '',
     })
 
-    let [checkboxState, setCheckboxState] = useState([])
 
     const handleChange = (event) => {
         setFormData({...formData, [event.target.name]:event.target.value})
-    }
+    }   
 
-    const handleCheckbox = (event) => {
-        setCheckboxState({...checkboxState, [event.target.name]:event.target.value})
-    }
+//     async function handleSubmit(event) {
+//     event.preventDefault()
 
-    async function handleSubmit(event) {
-    event.preventDefault()
+//     await axios.post(`http://localhost:3000/`, formData, {headers:{Authorization:`Bearer ${token}`}})
 
-    await axios.post(`http://localhost:3000/concept`, formData)
+//     navigate('/')
+//     setFormData({
+//         title: '',
+//         managers: [],
+//         operationals: [],
+//         description: '',
+//     })
+// }
 
-    navigate('/')
-    setFormData({
-        title: '',
-        managers: [],
-        operationals: [],
-        description: '',
-    })
+
+
+
+async function handleSubmit(event) {
+  event.preventDefault()
+  
+  try {
+    await axios.post(`http://localhost:3000/`, formData, {headers: {Authorization: `Bearer ${token}`}});            
+  } catch (error) {
+    console.error("Error details:", error.response?.data || error.message);
+  }
+  
+  navigate('/');
+  
+  setFormData({
+    title: '',
+    managers: [],
+    operationals: [],
+    description: '',
+  });
 }
+
 
     
 //  MUI
@@ -92,8 +169,6 @@ function AddConcept() {
     setAnchorEl(null);
   };
 //   MUI
-
-console.log(formData)
 
 
   return (
@@ -115,9 +190,9 @@ console.log(formData)
                         <Typography variant="h5" component="div">
                             Select Managers: 
                         </Typography>
-                        <FormGroup sx={{display: 'flex', flexDirection: 'column'}}>
-                            {data.map((oneData)=>
-                                <FormControlLabel key={oneData.id} control={<Checkbox name='managers' onChange={handleCheckbox} />} label={oneData.name} />
+                        <FormGroup value={formData.managers} name='managers' sx={{display: 'flex', flexDirection: 'column'}}>
+                            {managers.map((manager)=>
+                                <FormControlLabel key={manager._id} control={<Checkbox onChange={(e)=>handleManagerCheckboxChange(e, manager._id)} checked={formData.managers.includes(manager._id)} />} label={manager.username} />
                             )} 
                         </FormGroup>
                     </Box>   
@@ -126,9 +201,9 @@ console.log(formData)
                         <Typography variant="h5" component="div">
                             Select Operationals: 
                         </Typography>
-                        <FormGroup sx={{display: 'flex', flexDirection: 'column'}}>
-                            {data.map((oneData)=>
-                                <FormControlLabel key={oneData.id} control={<Checkbox onChange={handleChange} />} label={oneData.name} />
+                        <FormGroup value={formData.operationals} name="operationals" sx={{display: 'flex', flexDirection: 'column'}}>
+                            {operationals.map((operational)=>
+                                <FormControlLabel key={operational.id} control={<Checkbox onChange={(e)=>handleOperationalCheckboxChange(e, operational._id)} checked={formData.operationals.includes(operational._id)} />} label={operational.username} />
                             )} 
                         </FormGroup>
                     </Box>  

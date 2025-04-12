@@ -39,6 +39,7 @@ function Login() {
       <form onSubmit={handleSubmit}>
         <label htmlFor="username">Username:</label>
         <input
+        required
          type="text"
          name='username'
          id='username'
@@ -48,6 +49,7 @@ function Login() {
 
         <label htmlFor="password">Password:</label>
         <input
+        required
          type="password"
          name='password'
          id='password'
