@@ -27,10 +27,11 @@ function App() {
         <Route path="/login" element={<Login/>} /> */}
 
         <Route path="/" element={<ValidateIsLoggedIn><Homepage/></ValidateIsLoggedIn>}/>
-        <Route path="/concept-details" element={<ValidateIsLoggedIn><ConceptDetails/></ValidateIsLoggedIn>} />
+        <Route path="/concept/:id" element={<ValidateIsLoggedIn><ConceptDetails/></ValidateIsLoggedIn>} />
         <Route path="/add-concept" element={<ValidateIsLoggedIn><AddConcept/></ValidateIsLoggedIn>} />
         <Route path="/signup" element={<ValidateIsLoggedOut><Signup/></ValidateIsLoggedOut>}/>
         <Route path="/login" element={<ValidateIsLoggedOut><Login/></ValidateIsLoggedOut>}/>
+        {/* <Route path='*' element={<PageNotFound/>}/> */}
       </Routes>
     </>
   )
