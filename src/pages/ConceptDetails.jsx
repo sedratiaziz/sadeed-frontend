@@ -36,13 +36,14 @@ function ConceptDetails() {
     let [formData, setFormData] = useState({
             title: '',
             managers: [],
-            operationals: [],
+            operational: [],
             description: '',
     })
     
     async function getConceptDetails() {
         const fetchedConceptDetails = await axios.get(`http://localhost:3000/${user._id}/concept/${id}`, {headers: {Authorization: `Bearer ${token}`}})
-        setConceptDetails(fetchedConceptDetails.data)        
+        setConceptDetails(fetchedConceptDetails.data)  
+        console.log(fetchedConceptDetails.data)      
     }
     
     useEffect(()=>{
@@ -90,6 +91,10 @@ async function handleSubmit(event) {
   };
 //   MUI
 
+async function findOneManager(userId) {
+  await axios.get(`http://localhost:3000/${userId}`)
+  
+}
 
   return (
     <>
@@ -104,8 +109,10 @@ async function handleSubmit(event) {
                             Selected Managers: 
                         </Typography>
                         <FormGroup  name='managers' sx={{display: 'flex', flexDirection: 'column'}}>
-                            {/* {conceptDetails.selectedManagers.map((manager)=>
-                                <FormControlLabel key={manager._id} control={<Checkbox onChange={(e)=>handleManagerCheckboxChange(e, manager._id)} checked={formData.managers.includes(manager._id)} />} label={manager.username} />
+                        {conceptDetails.selectedManagers}
+
+                            {/* {conceptDetails.selectedManagers && conceptDetails.selectedManagers.map((manager)=>
+                                <FormControlLabel key={manager._id} control={<Checkbox onChange={(e)=>handleManagerCheckboxChange(e, manager._id)} checked={formData.selectedManagers.includes(manager._id)} />} label={manager.username} />
                             )}  */}
                         </FormGroup>
                     </Box>   
@@ -115,8 +122,10 @@ async function handleSubmit(event) {
                             Selected Operationals: 
                         </Typography>
                         <FormGroup  name="operationals" sx={{display: 'flex', flexDirection: 'column'}}>
-                            {/* {conceptDetails.selectedOperationals.map((operational)=>
-                                <FormControlLabel key={operational.id} control={<Checkbox onChange={(e)=>handleOperationalCheckboxChange(e, operational._id)} checked={formData.operationals.includes(operational._id)} />} label={operational.username} />
+                            {conceptDetails.selectedOperational}
+                            
+                            {/* {conceptDetails.selectedOperational && conceptDetails.selectedOperational.map((operational)=>
+                                <FormControlLabel key={operational.id} control={<Checkbox onChange={(e)=>handleOperationalCheckboxChange(e, operational._id)} checked={formData.selectedOperational.includes(operational._id)} />} label={operational.username} />
                             )}  */}
                         </FormGroup>
                     </Box>  

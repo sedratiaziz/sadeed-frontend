@@ -110,7 +110,7 @@ function Homepage() {
                       </div>                        
                   </div> 
                   
-                  {user.role === "admin" && 
+                  {user.role === "engineer" && 
                   
                   <div className=''>
                     <Link to='/add-concept'>                    

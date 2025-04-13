@@ -42,7 +42,7 @@ function AddConcept() {
         const [managers, setManagers] = useState([
             {}
         ])  
-        const [operationals, selectedOperationals] = useState([
+        const [operationals, setOperationals] = useState([
             {}
         ])  
 
@@ -66,7 +66,7 @@ function AddConcept() {
          async function getAllOperationals() {
           try {            
             const fetchedOperationals = await axios.get("http://localhost:3000/operationals/", {headers: {Authorization: `Bearer ${token}`}})
-              selectedOperationals(fetchedOperationals.data) 
+              setOperationals(fetchedOperationals.data) 
                        
           } catch (error) {
             console.log(error)
@@ -82,12 +82,12 @@ const handleManagerCheckboxChange = (event, managerId) => {
   if (event.target.checked) {
     setFormData(prev => ({
       ...prev,
-      managers: [...prev.managers, managerId]
+      selectedManagers: [...prev.selectedManagers, managerId]
     }));
   } else {
     setFormData(prev => ({
       ...prev,
-      managers: prev.managers.filter(id => id !== managerId)
+      selectedManagers: prev.selectedManagers.filter(id => id !== managerId)
     }));
   }
 };
@@ -97,24 +97,19 @@ const handleOperationalCheckboxChange = (event, operationalId) => {
   if (event.target.checked) {
     setFormData(prev => ({
       ...prev,
-      operationals: [...prev.operationals, operationalId]
+      selectedOperational: [...prev.selectedOperational, operationalId]
     }));
   } else {
     setFormData(prev => ({
       ...prev,
-      operationals: prev.operationals.filter(id => id !== operationalId)
+      selectedOperational: prev.selectedOperational.filter(id => id !== operationalId)
     }));
   }
 };
 
 
 
-    let [formData, setFormData] = useState({
-        title: '',
-        managers: [],
-        operationals: [],
-        description: '',
-    })
+
 
 
     const handleChange = (event) => {
@@ -135,7 +130,12 @@ const handleOperationalCheckboxChange = (event, operationalId) => {
 //     })
 // }
 
-
+let [formData, setFormData] = useState({
+  title: '',
+  selectedManagers: [],
+  selectedOperational: [],
+  description: '',
+})
 
 
 async function handleSubmit(event) {
@@ -151,13 +151,13 @@ async function handleSubmit(event) {
   
   setFormData({
     title: '',
-    managers: [],
-    operationals: [],
+    selectedManagers: [],  // Changed from selectedManagers
+    selectedOperational: [],  // Changed from selectedOperational
     description: '',
   });
 }
 
-
+console.log(formData)
     
 //  MUI
     const [anchorEl, setAnchorEl] = useState(null);
@@ -190,9 +190,9 @@ async function handleSubmit(event) {
                         <Typography variant="h5" component="div">
                             Select Managers: 
                         </Typography>
-                        <FormGroup value={formData.managers} name='managers' sx={{display: 'flex', flexDirection: 'column'}}>
+                        <FormGroup required value={formData.managers} name='managers' sx={{display: 'flex', flexDirection: 'column'}}>
                             {managers.map((manager)=>
-                                <FormControlLabel key={manager._id} control={<Checkbox onChange={(e)=>handleManagerCheckboxChange(e, manager._id)} checked={formData.managers.includes(manager._id)} />} label={manager.username} />
+                                <FormControlLabel key={manager._id} control={<Checkbox onChange={(e)=>handleManagerCheckboxChange(e, manager._id)} checked={formData.selectedManagers.includes(manager._id)} />} label={manager.username} />
                             )} 
                         </FormGroup>
                     </Box>   
@@ -201,9 +201,9 @@ async function handleSubmit(event) {
                         <Typography variant="h5" component="div">
                             Select Operationals: 
                         </Typography>
-                        <FormGroup value={formData.operationals} name="operationals" sx={{display: 'flex', flexDirection: 'column'}}>
+                        <FormGroup required value={formData.operationals} name="operationals" sx={{display: 'flex', flexDirection: 'column'}}>
                             {operationals.map((operational)=>
-                                <FormControlLabel key={operational.id} control={<Checkbox onChange={(e)=>handleOperationalCheckboxChange(e, operational._id)} checked={formData.operationals.includes(operational._id)} />} label={operational.username} />
+                                <FormControlLabel key={operational.id} control={<Checkbox onChange={(e)=>handleOperationalCheckboxChange(e, operational._id)} checked={formData.selectedOperational.includes(operational._id)} />} label={operational.username} />
                             )} 
                         </FormGroup>
                     </Box>  
