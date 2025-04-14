@@ -1,18 +1,19 @@
+import * as React from 'react';
 import { useContext, useEffect, useState} from 'react'
 import { authContext } from '../context/AuthContext'
-import { Link } from "react-router"
-import axios from 'axios'
+import { Link, useNavigate } from "react-router"
 
- 
+import axios from 'axios'
 
 import '../../public/styles/Homepage.css'
 
-import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 
 function Homepage() {
 
@@ -40,6 +41,7 @@ function Homepage() {
 
   const {user} = useContext(authContext)  
   const token = localStorage.getItem('token'); 
+  const navigate = useNavigate()
   
 
 
@@ -71,6 +73,20 @@ function Homepage() {
 
 
 
+
+async function handleDelete(userId, conceptId) {
+    try {
+      
+      await axios.delete(`http://localhost:3000/${userId}/concept/${conceptId}`, {headers: {Authorization: `Bearer ${token}`}});
+      setConcepts((prevConcepts) => prevConcepts.filter((concept) => concept._id !== conceptId));
+      navigate('/'); // Redirect to homepage after successful deletion
+    
+    } catch (error) {
+      // Handle errors appropriately
+      console.error("Error deleting concept:", error.response?.data || error.message);            
+    }
+}
+
    
   return (
         <section className="homepage-section">
@@ -86,7 +102,7 @@ function Homepage() {
                       </div>                    
                       <div>
                         {concepts.map((concept)=>
-                          <Link to={`/concept/${concept._id}`}>
+                          // <Link to={`/concept/${concept._id}`}>
                             <Card key={concept._id} sx={{ minWidth: 275, marginTop: 3, marginBottom: 3 }}>
                                 <CardContent>                              
                                   <Typography variant="h5" component="div">
@@ -98,14 +114,25 @@ function Homepage() {
                                   </Typography>
                                 </CardContent>
                                 <CardActions>
-                                  <Button size="small" sx={{ 
-                                        '&:focus': { outline: 'none' },
-                                        '&:focus-visible': { outline: 'none' },
-                                        '&:active': { outline: 'none' }
-                                      }} >Learn More</Button>
+                                  <form onSubmit={(e)=> {
+                                    e.preventDefault();
+                                    handleDelete(user._id, concept._id)
+                                    }}>
+                                    <Button 
+                                          type='submit'
+                                          color="error" 
+                                          variant="contained"
+                                          startIcon={<DeleteIcon />}
+                                          size="small" 
+                                          sx={{ 
+                                            '&:focus': { outline: 'none' },
+                                            '&:focus-visible': { outline: 'none' },
+                                            '&:active': { outline: 'none' }
+                                      }}> Delete </Button>
+                                  </form>                                    
                                 </CardActions>
                             </Card>                        
-                          </Link>
+                          // </Link>
                         )}                  
                       </div>                        
                   </div> 

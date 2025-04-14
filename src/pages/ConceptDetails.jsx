@@ -109,7 +109,7 @@ async function findOneManager(userId) {
                             Selected Managers: 
                         </Typography>
                         <FormGroup  name='managers' sx={{display: 'flex', flexDirection: 'column'}}>
-                        {conceptDetails.selectedManagers}
+                        {/* {conceptDetails.selectedManagers} */}
 
                             {/* {conceptDetails.selectedManagers && conceptDetails.selectedManagers.map((manager)=>
                                 <FormControlLabel key={manager._id} control={<Checkbox onChange={(e)=>handleManagerCheckboxChange(e, manager._id)} checked={formData.selectedManagers.includes(manager._id)} />} label={manager.username} />
@@ -122,7 +122,7 @@ async function findOneManager(userId) {
                             Selected Operationals: 
                         </Typography>
                         <FormGroup  name="operationals" sx={{display: 'flex', flexDirection: 'column'}}>
-                            {conceptDetails.selectedOperational}
+                            {/* {conceptDetails.selectedOperational} */}
                             
                             {/* {conceptDetails.selectedOperational && conceptDetails.selectedOperational.map((operational)=>
                                 <FormControlLabel key={operational.id} control={<Checkbox onChange={(e)=>handleOperationalCheckboxChange(e, operational._id)} checked={formData.selectedOperational.includes(operational._id)} />} label={operational.username} />
@@ -155,8 +155,7 @@ async function findOneManager(userId) {
                         <Typography variant="h5" component="div">
                                 {conceptDetails.isApproval} 
                         </Typography>
-                    </Box>    
-
+                    </Box>                                                        
                     <Button type='submit' size='large' variant="contained" 
                                 sx={{ 
                                 '&:focus': { outline: 'none' },

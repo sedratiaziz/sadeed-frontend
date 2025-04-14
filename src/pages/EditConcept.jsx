@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router'
+import { useNavigate, Link } from 'react-router'
 import { useContext } from 'react';
 import { authContext } from '../context/AuthContext'
 import axios from 'axios';
@@ -17,7 +17,7 @@ import Button from '@mui/material/Button';
 
 
 
-function AddConcept() {
+function EditConcept() {
       const {user} = useContext(authContext)    
 
     const darkTheme = createTheme({
@@ -141,16 +141,6 @@ let [formData, setFormData] = useState({
 async function handleSubmit(event) {
   event.preventDefault()
   
-  if (formData.selectedManagers.length === 0) {
-    alert("Please select at least one manager.");
-    return;
-  }
-
-  if (formData.selectedOperational.length === 0) {
-    alert("Please select at least one operational.");
-    return;
-  }
-  
   try {
     await axios.post(`http://localhost:3000/`, formData, {headers: {Authorization: `Bearer ${token}`}});            
   } catch (error) {
@@ -224,14 +214,16 @@ console.log(formData)
                         </Typography>
                         <TextField onChange={handleChange} name='description' value={formData.description} label="Description (optional)" variant="filled" />
                     </Box>    
-
-                    <Button type='submit' size='large' variant="contained" 
-                                sx={{ 
-                                '&:focus': { outline: 'none' },
-                                '&:focus-visible': { outline: 'none' },
-                                '&:active': { outline: 'none' }
-                                }}
-                        >Add New Concept</Button>
+                    
+                    <Link to="/edit-concept">
+                        <Button type='submit' size='large' variant="contained" 
+                                    sx={{ 
+                                    '&:focus': { outline: 'none' },
+                                    '&:focus-visible': { outline: 'none' },
+                                    '&:active': { outline: 'none' }
+                                    }}
+                            >Add New Concept</Button>
+                    </Link>
                 </form>
 
             </Box>
@@ -241,4 +233,4 @@ console.log(formData)
   )
 }
 
-export default AddConcept
+export default EditConcept
