@@ -16,10 +16,32 @@ import Typography from '@mui/material/Typography';
 
 function Homepage() {
 
-  const {user} = useContext(authContext)
-  const token = localStorage.getItem('token'); // or sessionStorage or from your auth context
-
+  //     *** MANAGERS VIEW OF CONCEPTS *** 
+  //     const handleChange = ()=> {
+  //     setStatus(currentStatus => !currentStatus)
+      
+  //     if (status === true) {
+  //         setVoteCount(voteCount + 1)
+  //     } 
+      
+  //     console.log(status)
+  //     console.log(voteCount)
+  //   }
   
+  // const handleApprove = () => {
+  //     setApprove(true)
+  //     setDisapprove(false)
+  // }
+  
+  // const handleDisapprove = () => {
+  //     setDisapprove(true)
+  //     setApprove(false)
+  // }
+
+  const {user} = useContext(authContext)  
+  const token = localStorage.getItem('token'); 
+  
+
 
   let [concepts, setConcepts] = useState([])
 
@@ -64,7 +86,7 @@ function Homepage() {
                       </div>                    
                       <div>
                         {concepts.map((concept)=>
-                          <Link >
+                          <Link to={`/concept/${concept._id}`}>
                             <Card key={concept._id} sx={{ minWidth: 275, marginTop: 3, marginBottom: 3 }}>
                                 <CardContent>                              
                                   <Typography variant="h5" component="div">
@@ -88,7 +110,7 @@ function Homepage() {
                       </div>                        
                   </div> 
                   
-                  {user.role === "admin" && 
+                  {user.role === "engineer" && 
                   
                   <div className=''>
                     <Link to='/add-concept'>                    

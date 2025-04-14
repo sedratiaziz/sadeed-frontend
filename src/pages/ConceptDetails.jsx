@@ -1,7 +1,10 @@
 import * as React from 'react'
-import { useContext, useEffect, useState} from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { useParams } from 'react-router';
 
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -10,82 +13,72 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { authContext } from '../context/AuthContext';
+import axios from 'axios';
 
 function ConceptDetails() {
     const {user} = useContext(authContext)
+    const token = localStorage.getItem('token'); 
+    const {id} = useParams()
 
-    let [status, setStatus] = useState(true)
-    let [currentStatus, setCurrentStatus] = useState(true)
-    let [voteCount, setVoteCount] = useState(0)
-    let [voteResult, setVoteResult] = useState('')
+    const darkTheme = createTheme({
+            palette: {
+              mode: 'dark',
+            },
+          });
+    const lightTheme = createTheme({
+            palette: {
+              mode: 'light',
+            },
+          });
+  
+    let [conceptDetails, setConceptDetails] = useState({})    
 
-    let [approve, setApprove] = useState(false)
-    let [disApprove, setDisapprove] = useState(false)
-
-    // dummy data for presentation:
-  let [data, setData] = useState([
-    {
-      id: 0,
-      name: 'name 1',
-      status: 'status 1',
-      description: 'blah blah blah blah blah blah blah blah blah',
-      link: '/concept-details',
-    },
-    {
-      id: 1,
-      name: 'name 2',
-      status: 'status 2',
-      description: 'blah blah blah blah blah blah blah blah blah',
-      link: '/',
+    let [formData, setFormData] = useState({
+            title: '',
+            managers: [],
+            operational: [],
+            description: '',
+    })
+    
+    async function getConceptDetails() {
+        const fetchedConceptDetails = await axios.get(`http://localhost:3000/${user._id}/concept/${id}`, {headers: {Authorization: `Bearer ${token}`}})
+        setConceptDetails(fetchedConceptDetails.data)  
+        console.log(fetchedConceptDetails.data)      
     }
-  ])
-  
-  // dummy data 2 for presentation:
-  let [data2, setData2] = useState([
-    {
-      id: 0,
-      name: 'Manager Ebrahim',
-      status: 'Approved',
-      description: 'very good idea',
-      link: '/concept-details',
-    },
-    {
-      id: 1,
-      name: 'Manager Adel',
-      status: 'DisApproved',
-      description: 'Not good enough, needs analyis',
-      link: '/',
-    },
-    {
-      id: 2,
-      name: 'Manager Abdulaziz',
-      status: 'Approved',
-      description: 'Amazing idea',
-      link: '/',
-    },
-  ])
-
-  
-//   const handleChange = ()=> {
-//     setStatus(currentStatus => !currentStatus)
     
-//     if (status === true) {
-//         setVoteCount(voteCount + 1)
-//     } 
+    useEffect(()=>{
+        getConceptDetails()
+    }, [])
     
-//     console.log(status)
-//     console.log(voteCount)
-//   }
+    console.log(conceptDetails.selectedManagers)   
 
-const handleApprove = () => {
-    setApprove(true)
-    setDisapprove(false)
-}
 
-const handleDisapprove = () => {
-    setDisapprove(true)
-    setApprove(false)
-}
+
+
+
+    const handleChange = (event) => {
+        setFormData({...formData, [event.target.name]:event.target.value})
+    }  
+
+async function handleSubmit(event) {
+    event.preventDefault()
+    
+    try {
+      await axios.post(`http://localhost:3000/`, formData, {headers: {Authorization: `Bearer ${token}`}});            
+    } catch (error) {
+      console.error("Error details:", error.response?.data || error.message);
+    }
+    
+    navigate('/');
+    
+    setFormData({
+      title: '',
+      managers: [],
+      operationals: [],
+      description: '',
+    });
+  }
+
 
 //  MUI
     const [anchorEl, setAnchorEl] = useState(null);
@@ -98,140 +91,84 @@ const handleDisapprove = () => {
   };
 //   MUI
 
+async function findOneManager(userId) {
+  await axios.get(`http://localhost:3000/${userId}`)
+  
+}
 
   return (
     <>
+       <ThemeProvider theme={darkTheme}>
         <Box component="section" sx={{ p: 2, border: '1px dashed grey' }}>
+            <Typography variant='h2'>{conceptDetails.title}</Typography>
             <Box component="div" sx={{ p: 2, border: '1px dashed grey' }}>
-                <Typography variant="h2" component="div">
-                    Concept Name
-                </Typography>
-                <Box component="div" sx={{ display: 'flex', alignItems: 'center', p: 2, border: '1px dashed grey' }}>
-                    <Typography variant="h5" component="div">
-                        Selected Managers:
-                    </Typography>
-                    <Button
-                        id="demo-positioned-button"
-                        aria-controls={open ? 'demo-positioned-menu' : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? 'true' : undefined}
-                        onClick={handleClick}
-                    >
-                        View
-                    </Button>
-                    <Menu
-                        id="demo-positioned-menu"
-                        aria-labelledby="demo-positioned-button"
-                        anchorEl={anchorEl}
-                        open={open}
-                        onClose={handleClose}
-                        anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'left',
-                        }}
-                        transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'left',
-                        }}
-                    >             
-                    {data2.map((oneData)=>
-                        <MenuItem key={oneData.id} onClick={handleClose} sx={{paddingTop: '15px', paddingBottom: '15px'}}>
-                            <Typography sx={{fontWeight: 700}}>                            
-                                <Typography>
-                                    {oneData.name} 
-                                </Typography>                                      
-                                <Typography>
-                                    {oneData.status} 
-                                </Typography>                                
-                                <Typography>
-                                    {oneData.description} 
-                                </Typography>                                                                        
-                            </Typography>                                                               
-                        </MenuItem>
-                    )}                                    
-                    </Menu>
-                </Box>
-            </Box>
-            
-            <Box component='div' sx={{ p: 2, border: '1px dashed grey' }}>
-                <Box component="div" sx={{ display: 'flex', alignItems: 'center', p: 2, border: '1px dashed grey' }}>
-                    { user.role === "admin" &&
-                    <Typography variant="h2" component="div">
-                        Team
-                    </Typography>
-                    }
-
-                    { user.role === "manager" &&
-                    <Typography variant="h2" component="div">
-                        Decision
-                    </Typography>
-                    }
-                </Box>
                 
-                <Box component="div" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', p: 2, border: '1px dashed grey' }}>
-                    { user.role === "admin" && 
+                <form onSubmit={handleSubmit}>                    
                     <Box component="div" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', p: 2, border: '1px dashed grey' }}>
-                    <Typography variant="h5" component="div">
-                        Status: Approved
-                    </Typography>
-                    <Button
-                        id="demo-positioned-button"
-                        aria-controls={open ? 'demo-positioned-menu' : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? 'true' : undefined}
-                        onClick={handleClick}
-                    >
-                        View
-                    </Button>
-                    <Menu
-                        id="demo-positioned-menu"
-                        aria-labelledby="demo-positioned-button"
-                        anchorEl={anchorEl}
-                        open={open}
-                        onClose={handleClose}
-                        anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'left',
-                        }}
-                        transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'left',
-                        }}
-                    >           
+                        <Typography variant="h5" component="div">
+                            Selected Managers: 
+                        </Typography>
+                        <FormGroup  name='managers' sx={{display: 'flex', flexDirection: 'column'}}>
+                        {conceptDetails.selectedManagers}
 
-                    {                    
-                        data2.map((oneData)=>
-                            <MenuItem key={oneData.id} onClick={handleClose} sx={{paddingTop: '15px', paddingBottom: '15px'}}>
-                                <Typography sx={{fontWeight: 700}}>                            
-                                    <Typography>
-                                        {oneData.name} 
-                                    </Typography>                                      
-                                    <Typography>
-                                        {oneData.status} 
-                                    </Typography>                                
-                                    <Typography>
-                                        {oneData.description} 
-                                    </Typography>                                                                        
-                                </Typography>                                                               
-                            </MenuItem>
-                    )}                                    
+                            {/* {conceptDetails.selectedManagers && conceptDetails.selectedManagers.map((manager)=>
+                                <FormControlLabel key={manager._id} control={<Checkbox onChange={(e)=>handleManagerCheckboxChange(e, manager._id)} checked={formData.selectedManagers.includes(manager._id)} />} label={manager.username} />
+                            )}  */}
+                        </FormGroup>
+                    </Box>   
+
+                    <Box component="div" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', p: 2, border: '1px dashed grey' }}>
+                        <Typography variant="h5" component="div">
+                            Selected Operationals: 
+                        </Typography>
+                        <FormGroup  name="operationals" sx={{display: 'flex', flexDirection: 'column'}}>
+                            {conceptDetails.selectedOperational}
+                            
+                            {/* {conceptDetails.selectedOperational && conceptDetails.selectedOperational.map((operational)=>
+                                <FormControlLabel key={operational.id} control={<Checkbox onChange={(e)=>handleOperationalCheckboxChange(e, operational._id)} checked={formData.selectedOperational.includes(operational._id)} />} label={operational.username} />
+                            )}  */}
+                        </FormGroup>
+                    </Box>  
+
+                    <Box component="div" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', p: 2, border: '1px dashed grey' }}>
+                        <Typography variant="h5" component="div">
+                                Description: 
+                        </Typography>
+                        <Typography variant="h5" component="div">
+                                {conceptDetails.description} 
+                        </Typography>
+                    </Box>    
                     
-                    </Menu> 
-                    </Box>
-                    }
+                    <Box component="div" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', p: 2, border: '1px dashed grey' }}>
+                        <Typography variant="h5" component="div">
+                                Status: 
+                        </Typography>
+                        <Typography variant="h5" component="div">
+                                {conceptDetails.status} 
+                        </Typography>
+                    </Box>    
+                    
+                    <Box component="div" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', p: 2, border: '1px dashed grey' }}>
+                        <Typography variant="h5" component="div">
+                                Approval: 
+                        </Typography>
+                        <Typography variant="h5" component="div">
+                                {conceptDetails.isApproval} 
+                        </Typography>
+                    </Box>    
 
-                    {user.role === "manager" &&  
-                    <FormGroup sx={{display: 'flex', flexDirection: 'row'}}>                        
-                            <FormControlLabel control={<Checkbox onChange={handleApprove} checked={approve} />} label="Approve" />                                                                        
-                            <FormControlLabel control={<Checkbox onChange={handleDisapprove} checked={disApprove} />} label="Disapprove" />                                                                        
-                    </FormGroup> }
+                    <Button type='submit' size='large' variant="contained" 
+                                sx={{ 
+                                '&:focus': { outline: 'none' },
+                                '&:focus-visible': { outline: 'none' },
+                                '&:active': { outline: 'none' }
+                                }}
+                        >Edit Concept?</Button>
+                </form>
 
-                </Box>                
             </Box>
-
-
         </Box>
-        
+    </ThemeProvider> 
     </>
   )
 }
