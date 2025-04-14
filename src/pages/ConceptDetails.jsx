@@ -33,24 +33,31 @@ function ConceptDetails() {
   
     let [conceptDetails, setConceptDetails] = useState({})    
 
-    let [formData, setFormData] = useState({
-            title: '',
-            managers: [],
-            operational: [],
-            description: '',
-    })
+    // let [formData, setFormData] = useState({
+    //         title: '',
+    //         managers: [],
+    //         operational: [],
+    //         description: '',
+    // })
     
     async function getConceptDetails() {
+      try {
         const fetchedConceptDetails = await axios.get(`http://localhost:3000/${user._id}/concept/${id}`, {headers: {Authorization: `Bearer ${token}`}})
         setConceptDetails(fetchedConceptDetails.data)  
-        console.log(fetchedConceptDetails.data)      
+        
+      } catch (error) {
+        console.log(error)
+      }  
     }
     
     useEffect(()=>{
         getConceptDetails()
     }, [])
     
-    console.log(conceptDetails.selectedManagers)   
+
+
+    
+    // console.log(conceptDetails.selectedManagers[0].username)   
 
 
 
@@ -60,41 +67,58 @@ function ConceptDetails() {
         setFormData({...formData, [event.target.name]:event.target.value})
     }  
 
-async function handleSubmit(event) {
-    event.preventDefault()
+// async function handleSubmit(event) {
+//     event.preventDefault()
     
-    try {
-      await axios.post(`http://localhost:3000/`, formData, {headers: {Authorization: `Bearer ${token}`}});            
-    } catch (error) {
-      console.error("Error details:", error.response?.data || error.message);
-    }
+//     try {
+//       await axios.post(`http://localhost:3000/`, formData, {headers: {Authorization: `Bearer ${token}`}});            
+//     } catch (error) {
+//       console.error("Error details:", error.response?.data || error.message);
+//     }
     
-    navigate('/');
+//     navigate('/');
     
-    setFormData({
-      title: '',
-      managers: [],
-      operationals: [],
-      description: '',
-    });
-  }
+//     setFormData({
+//       title: '',
+//       managers: [],
+//       operationals: [],
+//       description: '',
+//     });
+//   }
+
+
 
 
 //  MUI
-    const [anchorEl, setAnchorEl] = useState(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+
+const [managerAnchorEl, setManagerAnchorEl] = useState(null);
+const [operationalAnchorEl, setOperationalAnchorEl] = useState(null);
+
+const managerMenuOpen = Boolean(managerAnchorEl);
+const operationalMenuOpen = Boolean(operationalAnchorEl);
+
+const handleManagerClick = (event) => {
+  setManagerAnchorEl(event.currentTarget);
+};
+
+const handleOperationalClick = (event) => {
+  setOperationalAnchorEl(event.currentTarget);
+};
+
+const handleManagerClose = () => {
+  setManagerAnchorEl(null);
+};
+
+const handleOperationalClose = () => {
+  setOperationalAnchorEl(null);
+};
+
 //   MUI
 
-async function findOneManager(userId) {
-  await axios.get(`http://localhost:3000/${userId}`)
-  
-}
+
+
+
+
 
   return (
     <>
@@ -103,17 +127,35 @@ async function findOneManager(userId) {
             <Typography variant='h2'>{conceptDetails.title}</Typography>
             <Box component="div" sx={{ p: 2, border: '1px dashed grey' }}>
                 
-                <form onSubmit={handleSubmit}>                    
                     <Box component="div" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', p: 2, border: '1px dashed grey' }}>
                         <Typography variant="h5" component="div">
                             Selected Managers: 
                         </Typography>
-                        <FormGroup  name='managers' sx={{display: 'flex', flexDirection: 'column'}}>
-                        {/* {conceptDetails.selectedManagers} */}
-
-                            {/* {conceptDetails.selectedManagers && conceptDetails.selectedManagers.map((manager)=>
-                                <FormControlLabel key={manager._id} control={<Checkbox onChange={(e)=>handleManagerCheckboxChange(e, manager._id)} checked={formData.selectedManagers.includes(manager._id)} />} label={manager.username} />
-                            )}  */}
+                        <FormGroup  name='managers' sx={{display: 'flex', flexDirection: 'column'}}>                              
+                                <Button
+                                  id="managers-button"
+                                  aria-controls={managerMenuOpen ? 'managers-menu' : undefined}
+                                  aria-haspopup="true"
+                                  aria-expanded={managerMenuOpen ? 'true' : undefined}
+                                  onClick={handleManagerClick}
+                                >
+                                  View
+                                </Button>
+                                <Menu
+                                  id="managers-menu"
+                                  anchorEl={managerAnchorEl}
+                                  open={managerMenuOpen}
+                                  onClose={handleManagerClose}
+                                  MenuListProps={{
+                                    'aria-labelledby': 'managers-button',
+                                  }}
+                                >
+                                {conceptDetails.selectedManagers && conceptDetails.selectedManagers.map((manager)=>
+                                  <MenuItem onClick={handleManagerClose} sx={{ cursor: 'default' }}>
+                                    <Typography>{manager.username}</Typography>                                    
+                                  </MenuItem>
+                                )}
+                                </Menu>                                                         
                         </FormGroup>
                     </Box>   
 
@@ -121,12 +163,31 @@ async function findOneManager(userId) {
                         <Typography variant="h5" component="div">
                             Selected Operationals: 
                         </Typography>
-                        <FormGroup  name="operationals" sx={{display: 'flex', flexDirection: 'column'}}>
-                            {/* {conceptDetails.selectedOperational} */}
-                            
-                            {/* {conceptDetails.selectedOperational && conceptDetails.selectedOperational.map((operational)=>
-                                <FormControlLabel key={operational.id} control={<Checkbox onChange={(e)=>handleOperationalCheckboxChange(e, operational._id)} checked={formData.selectedOperational.includes(operational._id)} />} label={operational.username} />
-                            )}  */}
+                        <FormGroup  name="operationals" sx={{display: 'flex', flexDirection: 'column'}}>                            
+                        <Button
+                                  id="operational-button"
+                                  aria-controls={operationalMenuOpen ? 'operational-menu' : undefined}
+                                  aria-haspopup="true"
+                                  aria-expanded={operationalMenuOpen ? 'true' : undefined}
+                                  onClick={handleOperationalClick}
+                                >
+                                  View
+                                </Button>
+                                <Menu
+                                  id="operational-menu"
+                                  anchorEl={operationalAnchorEl}
+                                  open={operationalMenuOpen}
+                                  onClose={handleOperationalClose}
+                                  MenuListProps={{
+                                    'aria-labelledby': 'operational-button',
+                                  }}
+                                >
+                                {conceptDetails.selectedOperational && conceptDetails.selectedOperational.map((operational)=>
+                                  <MenuItem onClick={handleOperationalClose} sx={{ cursor: 'default' }}>
+                                    <Typography>{operational.username}</Typography>                                    
+                                  </MenuItem>
+                                )}
+                                </Menu> 
                         </FormGroup>
                     </Box>  
 
@@ -165,7 +226,6 @@ async function findOneManager(userId) {
                                 }}
                         >Edit Concept?</Button>                    
                     </Link>                                                        
-                </form>
 
             </Box>
         </Box>

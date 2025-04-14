@@ -116,6 +116,7 @@ async function handleDelete(userId, conceptId) {
                                 <CardActions>
                                   <form onSubmit={(e)=> {
                                     e.preventDefault();
+                                    e.stopPropagation() // without: you cant click on delete.  |  with: you can click delete
                                     handleDelete(user._id, concept._id)
                                     }}>
                                     <Button 
@@ -124,6 +125,7 @@ async function handleDelete(userId, conceptId) {
                                           variant="contained"
                                           startIcon={<DeleteIcon />}
                                           size="small" 
+                                          onClick={(e) => e.stopPropagation()} // without: you cant click delete.  |  with: you can click delete
                                           sx={{ 
                                             '&:focus': { outline: 'none' },
                                             '&:focus-visible': { outline: 'none' },
