@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useContext, useEffect, useState } from 'react'
-import { useParams } from 'react-router';
+import { useParams, Link } from 'react-router';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -155,14 +155,16 @@ async function findOneManager(userId) {
                         <Typography variant="h5" component="div">
                                 {conceptDetails.isApproval} 
                         </Typography>
-                    </Box>                                                        
-                    <Button type='submit' size='large' variant="contained" 
+                    </Box>
+                    <Link to={`/concept/${id}/edit-concept`}>
+                        <Button size='large' variant="contained" 
                                 sx={{ 
                                 '&:focus': { outline: 'none' },
                                 '&:focus-visible': { outline: 'none' },
                                 '&:active': { outline: 'none' }
                                 }}
-                        >Edit Concept?</Button>
+                        >Edit Concept?</Button>                    
+                    </Link>                                                        
                 </form>
 
             </Box>

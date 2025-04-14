@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate, Link } from 'react-router'
+import { useNavigate, useParams, Link } from 'react-router'
 import { useContext } from 'react';
 import { authContext } from '../context/AuthContext'
 import axios from 'axios';
@@ -18,7 +18,18 @@ import Button from '@mui/material/Button';
 
 
 function EditConcept() {
-      const {user} = useContext(authContext)    
+    const token = localStorage.getItem('token'); // or sessionStorage or from your auth context        
+    const navigate = useNavigate()
+    const {user} = useContext(authContext)    
+    const {id} = useParams()
+
+    
+    let [conceptDetails, setConceptDetails] = useState({})    
+    const [managers, setManagers] = useState([{}])  
+    const [operationals, setOperationals] = useState([{}])
+    
+
+    console.log(id)
 
     const darkTheme = createTheme({
         palette: {
@@ -31,20 +42,37 @@ function EditConcept() {
         },
       });
                 
+      
    
+      async function getConceptDetails() {
+        try {
+            const fetchedConceptDetails = await axios.get(`http://localhost:3000/${user._id}/concept/${id}`, {headers: {Authorization: `Bearer ${token}`}})
+            setConceptDetails(fetchedConceptDetails.data)   
+            console.log(fetchedConceptDetails)
+            
+            initializeFormData(fetchedConceptDetails.data);
 
-        
-        const token = localStorage.getItem('token'); // or sessionStorage or from your auth context        
-        const navigate = useNavigate()
-
+        } catch (error) {
+            console.error("Error details:", error.response?.data || error.message);
+        }
+    }
     
+    useEffect(()=>{
+        getConceptDetails()
+    }, [])
+     
+    console.log(conceptDetails) 
 
-        const [managers, setManagers] = useState([
-            {}
-        ])  
-        const [operationals, setOperationals] = useState([
-            {}
-        ])  
+         
+
+    function initializeFormData(conceptData) {
+        setFormData({
+          title: conceptData.title || '',
+          selectedManagers: conceptData.selectedManagers?.map(manager => manager._id) || [],
+          selectedOperational: conceptData.selectedOperational?.map(op => op._id) || [],
+          description: conceptData.description || ''
+        });
+      }
 
 
 
@@ -116,19 +144,6 @@ const handleOperationalCheckboxChange = (event, operationalId) => {
         setFormData({...formData, [event.target.name]:event.target.value})
     }   
 
-//     async function handleSubmit(event) {
-//     event.preventDefault()
-
-//     await axios.post(`http://localhost:3000/`, formData, {headers:{Authorization:`Bearer ${token}`}})
-
-//     navigate('/')
-//     setFormData({
-//         title: '',
-//         managers: [],
-//         operationals: [],
-//         description: '',
-//     })
-// }
 
 let [formData, setFormData] = useState({
   title: '',
@@ -141,8 +156,18 @@ let [formData, setFormData] = useState({
 async function handleSubmit(event) {
   event.preventDefault()
   
+  if (formData.selectedManagers.length === 0) {
+    alert("Please select at least one manager.");
+    return;
+  }
+
+  if (formData.selectedOperational.length === 0) {
+    alert("Please select at least one operational.");
+    return;
+  }
+  
   try {
-    await axios.post(`http://localhost:3000/`, formData, {headers: {Authorization: `Bearer ${token}`}});            
+    await axios.put(`http://localhost:3000/${user._id}/concept/${id}`, formData, {headers: {Authorization: `Bearer ${token}`}});            
   } catch (error) {
     console.error("Error details:", error.response?.data || error.message);
   }
@@ -157,7 +182,22 @@ async function handleSubmit(event) {
   });
 }
 
-console.log(formData)
+console.log("formData: ", formData)
+
+
+// async function handleEdit() {
+//     try {
+      
+//       await axios.put(`http://localhost:3000/${user._id}/concept/${id}`, {headers: {Authorization: `Bearer ${token}`}});
+      
+//       navigate('/'); // Redirect to homepage after successful deletion
+    
+//     } catch (error) {
+//       // Handle errors appropriately
+//       console.error("Error deleting concept:", error.response?.data || error.message);            
+//     }
+// }
+
     
 //  MUI
     const [anchorEl, setAnchorEl] = useState(null);
@@ -175,7 +215,7 @@ console.log(formData)
     <>
     <ThemeProvider theme={darkTheme}>
         <Box component="section" sx={{ p: 2, border: '1px dashed grey' }}>
-            <Typography variant='h2'>Submit Concept</Typography>
+            <Typography variant='h2'>Edit Concept</Typography>
             <Box component="div" sx={{ p: 2, border: '1px dashed grey' }}>
                 
                 <form onSubmit={handleSubmit}>
@@ -188,7 +228,7 @@ console.log(formData)
 
                     <Box component="div" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', p: 2, border: '1px dashed grey' }}>
                         <Typography variant="h5" component="div">
-                            Select Managers: 
+                            Selected Managers: 
                         </Typography>
                         <FormGroup required value={formData.managers} name='managers' sx={{display: 'flex', flexDirection: 'column'}}>
                             {managers.map((manager)=>
@@ -199,7 +239,7 @@ console.log(formData)
 
                     <Box component="div" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', p: 2, border: '1px dashed grey' }}>
                         <Typography variant="h5" component="div">
-                            Select Operationals: 
+                            Selected Operationals: 
                         </Typography>
                         <FormGroup required value={formData.operationals} name="operationals" sx={{display: 'flex', flexDirection: 'column'}}>
                             {operationals.map((operational)=>
@@ -214,16 +254,14 @@ console.log(formData)
                         </Typography>
                         <TextField onChange={handleChange} name='description' value={formData.description} label="Description (optional)" variant="filled" />
                     </Box>    
-                    
-                    <Link to="/edit-concept">
+                                        
                         <Button type='submit' size='large' variant="contained" 
                                     sx={{ 
                                     '&:focus': { outline: 'none' },
                                     '&:focus-visible': { outline: 'none' },
                                     '&:active': { outline: 'none' }
                                     }}
-                            >Add New Concept</Button>
-                    </Link>
+                            >Save Changes</Button>                    
                 </form>
 
             </Box>

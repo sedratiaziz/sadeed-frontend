@@ -102,7 +102,7 @@ async function handleDelete(userId, conceptId) {
                       </div>                    
                       <div>
                         {concepts.map((concept)=>
-                          // <Link to={`/concept/${concept._id}`}>
+                          <Link to={`/concept/${concept._id}`}>
                             <Card key={concept._id} sx={{ minWidth: 275, marginTop: 3, marginBottom: 3 }}>
                                 <CardContent>                              
                                   <Typography variant="h5" component="div">
@@ -132,7 +132,7 @@ async function handleDelete(userId, conceptId) {
                                   </form>                                    
                                 </CardActions>
                             </Card>                        
-                          // </Link>
+                          </Link>
                         )}                  
                       </div>                        
                   </div> 
