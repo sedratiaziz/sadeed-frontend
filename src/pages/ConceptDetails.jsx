@@ -214,7 +214,7 @@ const handleOperationalClose = () => {
                                 Approval: 
                         </Typography>
                         <Typography variant="h5" component="div">
-                                {conceptDetails.isApproval} 
+                            {conceptDetails.isAproved ? "Approved" : "Not Approved"}  
                         </Typography>
                     </Box>
                     <Link to={`/concept/${id}/edit-concept`}>
