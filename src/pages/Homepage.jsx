@@ -151,20 +151,17 @@ function Homepage() {
   }
 
 
-  useEffect(()=>{
-    setVotedConcepts(concepts)
+  
 
-  }, [])
-
-  concepts.forEach((e)=>{
-   const aziz=  e.aprovalCount.some((ej)=>{
-      return user._id !==
-    })
-    setVotedConcepts(...votedConcepts, aziz)
-  })
+//   concepts.forEach((e)=>{
+//    const aziz=  e.aprovalCount.some((ej)=>{
+//       return user._id !==
+//     })
+//     setVotedConcepts(...votedConcepts, aziz)
+//   })
 
 
-console.log(votedConcepts)
+// console.log(votedConcepts)
 
 
 
