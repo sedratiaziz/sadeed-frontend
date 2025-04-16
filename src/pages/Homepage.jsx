@@ -39,6 +39,7 @@ function Homepage() {
 
   // Concepts state
   const [concepts, setConcepts] = useState([]);
+  let [votedConcepts, setVotedConcepts] = useState([])
 
   // Fetch all concepts
   async function getAllConcepts() {
@@ -148,6 +149,24 @@ function Homepage() {
       console.error("Error updating status:", error.response?.data || error.message);
     }
   }
+
+
+  useEffect(()=>{
+    setVotedConcepts(concepts)
+
+  }, [])
+
+  concepts.forEach((e)=>{
+   const aziz=  e.aprovalCount.some((ej)=>{
+      return user._id !==
+    })
+    setVotedConcepts(...votedConcepts, aziz)
+  })
+
+
+console.log(votedConcepts)
+
+
 
   return (
     <section className="homepage-section">
@@ -310,7 +329,9 @@ function Homepage() {
                   )}
                 </CardActions>
               </Card>
+                
             ))}
+          
           </div>                        
         </div> 
         
