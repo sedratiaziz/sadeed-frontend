@@ -39,6 +39,7 @@ function Homepage() {
 
   // Concepts state
   const [concepts, setConcepts] = useState([]);
+  let [votedConcepts, setVotedConcepts] = useState([])
 
   // Fetch all concepts
   async function getAllConcepts() {
@@ -357,7 +358,9 @@ function Homepage() {
                   )}
                 </CardActions>
               </Card>
+                
             ))}
+          
           </div>                        
         </div> 
         
