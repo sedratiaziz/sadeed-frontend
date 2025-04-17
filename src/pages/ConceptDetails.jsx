@@ -32,7 +32,7 @@ function ConceptDetails() {
           });
   
     let [conceptDetails, setConceptDetails] = useState({})    
-
+    
     // let [formData, setFormData] = useState({
     //         title: '',
     //         managers: [],
@@ -57,7 +57,7 @@ function ConceptDetails() {
 
 
     
-    // console.log(conceptDetails.selectedManagers[0].username)   
+    // console.log(conceptDetails.aprovalCount)   
 
 
 
@@ -67,28 +67,7 @@ function ConceptDetails() {
         setFormData({...formData, [event.target.name]:event.target.value})
     }  
 
-// async function handleSubmit(event) {
-//     event.preventDefault()
     
-//     try {
-//       await axios.post(`http://localhost:3000/`, formData, {headers: {Authorization: `Bearer ${token}`}});            
-//     } catch (error) {
-//       console.error("Error details:", error.response?.data || error.message);
-//     }
-    
-//     navigate('/');
-    
-//     setFormData({
-//       title: '',
-//       managers: [],
-//       operationals: [],
-//       description: '',
-//     });
-//   }
-
-
-
-
 //  MUI
 
 const [managerAnchorEl, setManagerAnchorEl] = useState(null);
@@ -149,9 +128,10 @@ const handleOperationalClose = () => {
                                   MenuListProps={{
                                     'aria-labelledby': 'managers-button',
                                   }}
-                                >
+                                >                                  
+                                                              
                                 {conceptDetails.selectedManagers && conceptDetails.selectedManagers.map((manager)=>
-                                  <MenuItem onClick={handleManagerClose} sx={{ cursor: 'default' }}>
+                                  <MenuItem key={manager._id} onClick={handleManagerClose} sx={{ cursor: 'default' }}>
                                     <Typography>{manager.username}</Typography>                                    
                                   </MenuItem>
                                 )}
@@ -183,7 +163,7 @@ const handleOperationalClose = () => {
                                   }}
                                 >
                                 {conceptDetails.selectedOperational && conceptDetails.selectedOperational.map((operational)=>
-                                  <MenuItem onClick={handleOperationalClose} sx={{ cursor: 'default' }}>
+                                  <MenuItem key={operational._id} onClick={handleOperationalClose} sx={{ cursor: 'default' }}>
                                     <Typography>{operational.username}</Typography>                                    
                                   </MenuItem>
                                 )}

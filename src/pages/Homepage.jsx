@@ -137,17 +137,44 @@ function Homepage() {
   // Status handling for operational users
   async function handleStatusChange(userId, conceptId, newStatus) {
     try {
-      await axios.put(
-        `http://localhost:3000/${userId}/concept/${conceptId}/status`, 
-        { status: newStatus }, 
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      
+      const response = await axios.put(`http://localhost:3000/${userId}/concept/${conceptId}/status`, { status: newStatus }, { headers: { Authorization: `Bearer ${token}` }});
+      
       // Refresh concepts after status change
       getAllConcepts();
+      
     } catch (error) {
       console.error("Error updating status:", error.response?.data || error.message);
     }
   }
+
+
+  // async function handleStatusChange(userId, conceptId, newStatus) {
+  //   console.log(`Attempting to change status: userId=${userId}, conceptId=${conceptId}, newStatus=${newStatus}`);
+    
+  //   try {
+  //     const response = await axios.put(
+  //       `http://localhost:3000/${userId}/concept/${conceptId}/status`, 
+  //       { status: newStatus }, 
+  //       { headers: { Authorization: `Bearer ${token}` }}
+  //     );
+      
+  //     console.log("Status update response:", response.data);
+      
+  //     // Refresh concepts after status change
+  //     getAllConcepts();
+      
+  //   } catch (error) {
+  //     console.error("Error updating status:", error);
+  //     console.error("Error details:", error.response?.data || error.message);
+  //   }
+  // }
+
+
+
+
+
+
 
   return (
     <section className="homepage-section">
@@ -220,6 +247,9 @@ function Homepage() {
           <div className="concepts-list">
             {Array.isArray(concepts) && concepts.map((concept) => (
               <Card key={concept._id} sx={{ minWidth: 275, marginTop: 3, marginBottom: 3 }}>
+              
+              {/* Engineers have Edit access */}
+              { user.role === 'engineer' && 
                 <Link to={`/concept/${concept._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                   <CardContent>                              
                     <Typography variant="h5" component="div">
@@ -233,7 +263,24 @@ function Homepage() {
                     </Typography>
                   </CardContent>
                 </Link>
-                
+              }
+              
+              {/* Managers & Operationals dont have Edit access */}
+              { (user.role === 'manager' || user.role === 'operational') && 
+                  <CardContent>                              
+                    <Typography variant="h5" component="div">
+                      {concept.title}
+                    </Typography>
+                    <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>
+                      Status: {concept.status}
+                    </Typography>
+                    <Typography variant="body2">
+                      {concept.description}                                
+                    </Typography>
+                  </CardContent>
+              }
+
+              
                 <CardActions>
                   {/* Engineer Actions */}
                   {user.role === "engineer" && (
@@ -282,7 +329,7 @@ function Homepage() {
                         variant="contained"
                         startIcon={<CheckCircleIcon />}
                         size="small" 
-                        onClick={() => handleStatusChange(user._id, concept._id, "Done")}
+                        onClick={() => handleStatusChange(user._id, concept._id, "done")}
                         sx={{ mr: 1 }}
                       >
                         Mark as Done
@@ -292,7 +339,7 @@ function Homepage() {
                         variant="contained"
                         startIcon={<PendingIcon />}
                         size="small" 
-                        onClick={() => handleStatusChange(user._id, concept._id, "In Progress")}
+                        onClick={() => handleStatusChange(user._id, concept._id, "in progress")}
                         sx={{ mr: 1 }}
                       >
                         In Progress
@@ -302,7 +349,7 @@ function Homepage() {
                         variant="contained"
                         startIcon={<DoNotDisturbIcon />}
                         size="small" 
-                        onClick={() => handleStatusChange(user._id, concept._id, "Not Started")}
+                        onClick={() => handleStatusChange(user._id, concept._id, "not started")}
                       >
                         Not Started
                       </Button>
