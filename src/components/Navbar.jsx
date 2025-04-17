@@ -3,21 +3,26 @@ import { useContext, useState } from "react"
 import { authContext } from "../context/AuthContext"
 import '../../public/styles/Navbar.css'
 
-function Navbar() {
-  const {user, logout} = useContext(authContext)
+import Button from '@mui/material/Button';
 
+
+function Navbar(props) {
+  const {user, logout} = useContext(authContext)
+  const { userTheme } = props
+  console.log("form Navbar:", userTheme)
 
   return (
     <div className="nav-container">
       <ul>
         <Link to="/"><li>Homepage</li></Link>
+        <Button>Toggle</Button>
+
         {user && (
           <>
           <li>Welcome {user.username}</li>
           <button onClick={logout}>Logout</button>
           </>
         )}
-
         
         {!user && (
           <>

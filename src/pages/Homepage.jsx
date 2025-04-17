@@ -5,28 +5,57 @@ import { Link, useNavigate } from "react-router";
 import axios from 'axios';
 import '../../public/styles/Homepage.css';
 
+
 // MUI Components
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import DeleteIcon from '@mui/icons-material/Delete';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Alert from '@mui/material/Alert';
+import Badge from '@mui/material/Badge';
+
+// MUI Icons
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PendingIcon from '@mui/icons-material/Pending';
+import DeleteIcon from '@mui/icons-material/Delete';
 import DoNotDisturbIcon from '@mui/icons-material/DoNotDisturb';
 
-function Homepage() {  
+
+function Homepage(props) {
+  
+  let { userTheme } = props  
+  
+
   const { user } = useContext(authContext);  
   const token = localStorage.getItem('token'); 
   const navigate = useNavigate();
   
+ 
+
+
+
+            
+          // const isDarkTheme = useThemeDetector()
+          console.log("from homepage:", userTheme ? 'dark' : 'light')
+
+
+          let [theme, setTheme] = useState('')
+
+          function handleTheme(e) {
+            if (e.target.id === 'dark') {
+              setTheme('darkTheme')
+            } else {
+              setTheme('lightTheme')
+            }
+          }
+          
+// ***************************************************************************************************************
+
   // Notification menu state
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -40,6 +69,9 @@ function Homepage() {
   // Concepts state
   const [concepts, setConcepts] = useState([]);
   let [votedConcepts, setVotedConcepts] = useState([])
+  
+  
+ 
 
   // Fetch all concepts
   async function getAllConcepts() {
@@ -150,28 +182,6 @@ function Homepage() {
   }
 
 
-  // async function handleStatusChange(userId, conceptId, newStatus) {
-  //   console.log(`Attempting to change status: userId=${userId}, conceptId=${conceptId}, newStatus=${newStatus}`);
-    
-  //   try {
-  //     const response = await axios.put(
-  //       `http://localhost:3000/${userId}/concept/${conceptId}/status`, 
-  //       { status: newStatus }, 
-  //       { headers: { Authorization: `Bearer ${token}` }}
-  //     );
-      
-  //     console.log("Status update response:", response.data);
-      
-  //     // Refresh concepts after status change
-  //     getAllConcepts();
-      
-  //   } catch (error) {
-  //     console.error("Error updating status:", error);
-  //     console.error("Error details:", error.response?.data || error.message);
-  //   }
-  // }
-
-
 
 
 
@@ -193,6 +203,8 @@ function Homepage() {
             </Badge>
           </IconButton>
           
+          <Button onClick={handleTheme}>Toggle Theme</Button>
+
           <Menu
             id="notification-menu"
             anchorEl={anchorEl}
@@ -210,7 +222,7 @@ function Homepage() {
             }}
           >
             {notifs.length > 0 ? (
-              notifs.map((notif) => (
+              [...notifs].reverse().map((notif) => (
                 <MenuItem 
                   key={notif._id} 
                   onClick={() => handleNotificationClick(notif._id)} 
