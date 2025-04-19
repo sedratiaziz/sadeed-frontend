@@ -19,17 +19,6 @@ function ConceptDetails() {
     const {user} = useContext(authContext)
     const token = localStorage.getItem('token'); 
     const {id} = useParams()
-
-    const darkTheme = createTheme({
-            palette: {
-              mode: 'dark',
-            },
-          });
-    const lightTheme = createTheme({
-            palette: {
-              mode: 'light',
-            },
-          });
   
     let [conceptDetails, setConceptDetails] = useState({})    
     
@@ -101,7 +90,6 @@ const handleOperationalClose = () => {
 
   return (
     <>
-       <ThemeProvider theme={darkTheme}>
         <Box component="section" sx={{ p: 2, border: '1px dashed grey' }}>
             <Typography variant='h2'>{conceptDetails.title}</Typography>
             <Box component="div" sx={{ p: 2, border: '1px dashed grey' }}>
@@ -208,8 +196,7 @@ const handleOperationalClose = () => {
                     </Link>                                                        
 
             </Box>
-        </Box>
-    </ThemeProvider> 
+        </Box> 
     </>
   )
 }

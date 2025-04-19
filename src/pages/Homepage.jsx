@@ -11,11 +11,15 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Alert from '@mui/material/Alert';
 import Badge from '@mui/material/Badge';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 // MUI Icons
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -36,26 +40,9 @@ function Homepage(props) {
   const navigate = useNavigate();
   
  
-
-
-
+  const [isLoading, setIsLoading] = useState(true);
+  
             
-          // const isDarkTheme = useThemeDetector()
-          console.log("from homepage:", userTheme ? 'dark' : 'light')
-
-
-          let [theme, setTheme] = useState('')
-
-          function handleTheme(e) {
-            if (e.target.id === 'dark') {
-              setTheme('darkTheme')
-            } else {
-              setTheme('lightTheme')
-            }
-          }
-          
-// ***************************************************************************************************************
-
   // Notification menu state
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -76,6 +63,7 @@ function Homepage(props) {
   // Fetch all concepts
   async function getAllConcepts() {
     try {
+      setIsLoading(true);
       let url;
       
       if (user.role === "engineer") {
@@ -88,6 +76,8 @@ function Homepage(props) {
       setConcepts(fetchedConcepts.data);      
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   }
   
@@ -100,13 +90,16 @@ function Homepage(props) {
   
   async function getNotifications() {
     try {
+      setIsLoading(true);
       const fetchedNotifications = await axios.get(`http://localhost:3000/${user._id}/notifications`, { 
         headers: { Authorization: `Bearer ${token}` } 
       });
       setNotifs(fetchedNotifications.data);  
     } catch (error) {
       console.log(error);
-    }  
+    } finally {
+      setIsLoading(false);
+    }
   }
   
   useEffect(() => {
@@ -187,10 +180,31 @@ function Homepage(props) {
 
 
 
-  return (
+  return (    
     <section className="homepage-section">
-      <div className="container">                  
-        <div className="header-section">  
+      
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+        <Box
+          component="img"
+          sx={{
+            height: 233,
+            width: 350,
+            maxHeight: { xs: 233, md: 167 },
+            maxWidth: { xs: 350, md: 250 },
+          }}
+          alt="The house from the offer."
+          src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2"
+        />
+      </Backdrop>
+
+      <div className="container">   
+        {!isLoading && (
+          <>
+          <div className="header-section">  
           <IconButton
             id="notification-button"
             aria-controls={open ? 'notification-menu' : undefined}
@@ -202,9 +216,7 @@ function Homepage(props) {
               <NotificationsIcon />
             </Badge>
           </IconButton>
-          
-          <Button onClick={handleTheme}>Toggle Theme</Button>
-
+                    
           <Menu
             id="notification-menu"
             anchorEl={anchorEl}
@@ -389,6 +401,9 @@ function Homepage(props) {
             </Link>
           </div>
         )}
+          </>
+        )}               
+
       </div>
     </section>
   );

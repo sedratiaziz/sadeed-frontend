@@ -19,21 +19,8 @@ import Button from '@mui/material/Button';
 
 function AddConcept() {
       const {user} = useContext(authContext)    
-
-    const darkTheme = createTheme({
-        palette: {
-          mode: 'dark',
-        },
-      });
-    const lightTheme = createTheme({
-        palette: {
-          mode: 'light',
-        },
-      });
                 
-   
-
-        
+  
         const token = localStorage.getItem('token'); // or sessionStorage or from your auth context        
         const navigate = useNavigate()
 
@@ -183,7 +170,6 @@ console.log(formData)
 
   return (
     <>
-    <ThemeProvider theme={darkTheme}>
         <Box component="section" sx={{ p: 2, border: '1px dashed grey' }}>
             <Typography variant='h2'>Submit Concept</Typography>
             <Box component="div" sx={{ p: 2, border: '1px dashed grey' }}>
@@ -236,7 +222,6 @@ console.log(formData)
 
             </Box>
         </Box>
-    </ThemeProvider>
     </>
   )
 }

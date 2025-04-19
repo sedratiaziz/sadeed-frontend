@@ -8,14 +8,14 @@ import Button from '@mui/material/Button';
 
 function Navbar(props) {
   const {user, logout} = useContext(authContext)
-  const { userTheme } = props
+  const { userTheme, onToggleTheme } = props
   console.log("form Navbar:", userTheme)
 
   return (
     <div className="nav-container">
       <ul>
         <Link to="/"><li>Homepage</li></Link>
-        <Button>Toggle</Button>
+        <Button onClick={onToggleTheme}>{userTheme === 'dark' ? 'Light Mode' : 'Dark Mode'}</Button>
 
         {user && (
           <>

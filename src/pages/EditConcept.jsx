@@ -27,22 +27,7 @@ function EditConcept() {
     let [conceptDetails, setConceptDetails] = useState({})    
     const [managers, setManagers] = useState([{}])  
     const [operationals, setOperationals] = useState([{}])
-    
-
-    console.log(id)
-
-    const darkTheme = createTheme({
-        palette: {
-          mode: 'dark',
-        },
-      });
-    const lightTheme = createTheme({
-        palette: {
-          mode: 'light',
-        },
-      });
-                
-      
+                    
    
       async function getConceptDetails() {
         try {
@@ -213,7 +198,6 @@ console.log("formData: ", formData)
 
   return (
     <>
-    <ThemeProvider theme={darkTheme}>
         <Box component="section" sx={{ p: 2, border: '1px dashed grey' }}>
             <Typography variant='h2'>Edit Concept</Typography>
             <Box component="div" sx={{ p: 2, border: '1px dashed grey' }}>
@@ -266,7 +250,6 @@ console.log("formData: ", formData)
 
             </Box>
         </Box>
-    </ThemeProvider>
     </>
   )
 }
