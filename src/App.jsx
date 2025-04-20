@@ -17,6 +17,7 @@ import ValidateIsLoggedIn from './validators/ValidateIsLoggedIn'
 import ValidateIsLoggedOut from './validators/ValidateIsLoggedOut'
 import EditConcept from './pages/EditConcept'
 
+import Box from '@mui/material/Box';
 
 function App() {
 const [theme, setTheme] = useState(() => {
@@ -54,20 +55,36 @@ useEffect(() => {
 }, []);
 
               
+useEffect(() => {
+  const root = document.documentElement;
+  if (theme === 'light') {
+    root.style.setProperty('--background-color', '#f7f5f4');
+    root.style.setProperty('--text-color', '#213547');
+  } else {
+    root.style.setProperty('--background-color', '#242424');
+    root.style.setProperty('--text-color', 'rgba(255, 255, 255, 0.87)');
+  }
+}, [theme]);
 
   return (
     <>
-    <ThemeProvider theme={theme === 'dark' ? darkTheme : lightTheme}>    
-        <Navbar userTheme={theme} onToggleTheme={toggleTheme} />
-        <Routes>          
-          <Route path="/" element={<ValidateIsLoggedIn><Homepage userTheme={theme}/></ValidateIsLoggedIn>}/>
-          <Route path="/concept/:id" element={<ValidateIsLoggedIn><ConceptDetails/></ValidateIsLoggedIn>} />
-          <Route path="/add-concept" element={<ValidateIsLoggedIn><AddConcept/></ValidateIsLoggedIn>} />
-          <Route path="/concept/:id/edit-concept" element={<ValidateIsLoggedIn><EditConcept/></ValidateIsLoggedIn>} />
-          <Route path="/signup" element={<ValidateIsLoggedOut><Signup/></ValidateIsLoggedOut>}/>
-          <Route path="/login" element={<ValidateIsLoggedOut><Login/></ValidateIsLoggedOut>}/>
-          <Route path='*' element={<PageNotFound/>}/>
-        </Routes>
+    <ThemeProvider theme={theme === 'dark' ? darkTheme : lightTheme}>  
+      
+      <Box variant="div" className="app-container">      
+        <Navbar className="navbar" userTheme={theme} onToggleTheme={toggleTheme} />
+        <Box className="content-container">
+          <Routes className="content">          
+            <Route path="/" element={<ValidateIsLoggedIn><Homepage userTheme={theme}/></ValidateIsLoggedIn>}/>
+            <Route path="/concept/:id" element={<ValidateIsLoggedIn><ConceptDetails/></ValidateIsLoggedIn>} />
+            <Route path="/add-concept" element={<ValidateIsLoggedIn><AddConcept/></ValidateIsLoggedIn>} />
+            <Route path="/concept/:id/edit-concept" element={<ValidateIsLoggedIn><EditConcept/></ValidateIsLoggedIn>} />
+            <Route path="/signup" element={<ValidateIsLoggedOut><Signup/></ValidateIsLoggedOut>}/>
+            <Route path="/login" element={<ValidateIsLoggedOut><Login/></ValidateIsLoggedOut>}/>
+            <Route path='*' element={<PageNotFound/>}/>
+          </Routes>          
+        </Box>      
+      </Box>  
+      
       </ThemeProvider>
     </>
   )
