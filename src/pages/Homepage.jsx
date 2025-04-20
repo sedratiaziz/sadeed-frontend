@@ -188,17 +188,6 @@ function Homepage(props) {
         open={isLoading}
       >
         <CircularProgress color="inherit" />
-        <Box
-          component="img"
-          sx={{
-            height: 233,
-            width: 350,
-            maxHeight: { xs: 233, md: 167 },
-            maxWidth: { xs: 350, md: 250 },
-          }}
-          alt="The house from the offer."
-          src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2"
-        />
       </Backdrop>
 
       <div className="container">   
@@ -271,7 +260,7 @@ function Homepage(props) {
                     
           <div className="concepts-list">
             {Array.isArray(concepts) && concepts.map((concept) => (
-              <Card key={concept._id} sx={{ minWidth: 275, marginTop: 3, marginBottom: 3 }}>
+              <Card className='card' key={concept._id} sx={{ minWidth: 275, marginTop: 3, marginBottom: 3 }}>
               
               {/* Engineers have Edit access */}
               { user.role === 'engineer' && 

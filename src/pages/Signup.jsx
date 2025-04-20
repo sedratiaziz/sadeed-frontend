@@ -2,6 +2,8 @@ import {useState} from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router'
 
+import TextField from '@mui/material/TextField';
+
 function Signup() {
 
   // const role = ["admin", "manager", "employee"]
@@ -35,25 +37,29 @@ function Signup() {
 
       <form onSubmit={handleSubmit}>
         <label htmlFor="username">Username:</label>
-        <input
+        <TextField
          required
          type="text"
          name='username'
          id='username'
+         variant='filled'
+         label='Enter your username'
          value={formData.username}
          onChange={handleChange}
           />
-
+<br /><br />
         <label htmlFor="password">Password:</label>
-        <input
+        <TextField
         required
          type="password"
          name='password'
          id='password'
+         variant='filled'
+         label='Enter your password'
          value={formData.password}
          onChange={handleChange}
           />
-
+<br /><br />
           <button>Submit</button>
       </form>
     </div>

@@ -44,21 +44,21 @@
 
 
 
-/* App.css or your main CSS file */
 .app-container {
   display: flex;
   min-height: 100vh;
 }
 
 .nav-container {
-  width: 250px; /* Adjust width as needed */
+  width: 250px;
   height: 100vh;
   position: sticky;
   top: 0;
-  background: #f5f5f5; /* Add your preferred background */
+  background: #f5f5f5; 
 }
 
+
 .content-container {
-  flex: 1;
-  padding: 20px;
+  width: 100%;
+  display: flex;
 }
