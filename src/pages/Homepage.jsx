@@ -187,7 +187,7 @@ function Homepage(props) {
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={isLoading}
       >
-        <CircularProgress color="inherit" />
+        <CircularProgress color="inherit" />        
       </Backdrop>
 
       <div className="container">   
