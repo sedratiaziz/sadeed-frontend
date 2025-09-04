@@ -1,7 +1,11 @@
+/* Remove the width restriction */
 #root {
-  max-width: 1280px;
-  text-align: center;
+  width: 100%;     /* Take full width */
+  max-width: none; /* No max limit */
+  margin: 0;       /* Remove auto-centering */
+  text-align: left; /* Optional: left-align text by default */
 }
+
 
 .logo {
   height: 6em;
@@ -60,5 +64,4 @@
 
 .content-container {
   flex: 1;
-  padding: 20px;
 }

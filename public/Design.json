@@ -1,0 +1,126 @@
+{
+    "designSystem": {
+      "theme": {
+        "colors": {
+          "primary": "#1A2A4F",
+          "secondary": "#F5F5F5",
+          "accent": "#FF4081",
+          "textPrimary": "#1A1A1A",
+          "textSecondary": "#666666",
+          "background": "#FFFFFF",
+          "cardBackground": "#FFFFFF",
+          "highlight": "#F2F3F7"
+        },
+        "typography": {
+          "fontFamily": "Inter, sans-serif",
+          "fontSizes": {
+            "h1": "28px",
+            "h2": "22px",
+            "h3": "18px",
+            "body": "14px",
+            "small": "12px"
+          },
+          "fontWeights": {
+            "regular": 400,
+            "medium": 500,
+            "bold": 700
+          }
+        },
+        "spacing": {
+          "xs": "4px",
+          "sm": "8px",
+          "md": "16px",
+          "lg": "24px",
+          "xl": "32px"
+        },
+        "borders": {
+          "radius": {
+            "sm": "6px",
+            "md": "12px",
+            "lg": "20px"
+          }
+        },
+        "shadows": {
+          "card": "0 2px 6px rgba(0,0,0,0.05)",
+          "hover": "0 4px 12px rgba(0,0,0,0.1)"
+        }
+      },
+      "layout": {
+        "grid": {
+          "columns": 12,
+          "gutter": "16px"
+        },
+        "sidebar": {
+          "width": "72px",
+          "backgroundColor": "#1A2A4F",
+          "iconStyle": "monochrome",
+          "activeIndicator": {
+            "type": "highlight",
+            "shape": "circle",
+            "color": "#FF4081"
+          }
+        },
+        "header": {
+          "height": "64px",
+          "backgroundColor": "#FFFFFF",
+          "elements": ["welcomeText", "searchBar", "profileAvatar"]
+        },
+        "mainSections": [
+          "calendar",
+          "urgentTasks",
+          "projectDirectory",
+          "commentsFeed",
+          "teamDirectory",
+          "tagButtons"
+        ]
+      },
+      "components": {
+        "calendar": {
+          "type": "date-picker",
+          "style": "compact-grid",
+          "highlightToday": true,
+          "interaction": "click-select"
+        },
+        "taskList": {
+          "itemStyle": {
+            "layout": "row",
+            "checkbox": true,
+            "statusIndicator": "dot-right",
+            "priorityColor": "accent"
+          }
+        },
+        "card": {
+          "backgroundColor": "cardBackground",
+          "borderRadius": "md",
+          "shadow": "card",
+          "padding": "md"
+        },
+        "commentFeed": {
+          "itemStyle": "card",
+          "avatarPosition": "left",
+          "truncateText": true
+        },
+        "teamDirectory": {
+          "layout": "grid",
+          "avatarShape": "circle",
+          "cardVariant": "flat"
+        },
+        "tags": {
+          "style": "pill",
+          "backgroundColors": ["#E6F0FF", "#E6FFF5", "#FFF5E6"],
+          "textStyle": "small"
+        }
+      },
+      "interactions": {
+        "hover": {
+          "card": "elevate-shadow",
+          "sidebarIcon": "highlight"
+        },
+        "active": {
+          "button": "accent-fill",
+          "tab": "underline"
+        }
+      }
+    }
+  }
+  
