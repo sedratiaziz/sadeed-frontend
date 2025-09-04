@@ -260,7 +260,7 @@ function Homepage(props) {
                     
           <div className="concepts-list">
             {Array.isArray(concepts) && concepts.map((concept) => (
-              <Card key={concept._id} sx={{ minWidth: 275, marginTop: 3, marginBottom: 3 }}>
+              <Card className='card' key={concept._id} sx={{ minWidth: 275, marginTop: 3, marginBottom: 3 }}>
               
               {/* Engineers have Edit access */}
               { user.role === 'engineer' && 
