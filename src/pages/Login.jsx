@@ -3,6 +3,8 @@ import axios from 'axios'
 import { useNavigate } from 'react-router'
 import { authContext } from '../context/AuthContext'
 
+import TextField from '@mui/material/TextField';
+
 
 function Login() {
       const [formData, setFormData] = useState({
@@ -38,25 +40,31 @@ function Login() {
 
       <form onSubmit={handleSubmit}>
         <label htmlFor="username">Username:</label>
-        <input
+        <TextField
         required
          type="text"
          name='username'
          id='username'
+         label='Enter your name here'
          value={formData.username}
          onChange={handleChange}
+         variant="filled"
           />
-
+<br />
+<br />
         <label htmlFor="password">Password:</label>
-        <input
+        <TextField
         required
          type="password"
          name='password'
          id='password'
+         label='Enter a strong password'
+         variant='filled'
          value={formData.password}
          onChange={handleChange}
           />
-
+<br />
+<br />
           <button>Submit</button>
       </form>
     </div>
