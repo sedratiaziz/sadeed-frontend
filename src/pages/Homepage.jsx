@@ -223,203 +223,200 @@ function Homepage(props) {
       <div className="main-content">   
         {!isLoading && (
           <>
-          <div className="header-section">  
-          <IconButton
-            id="notification-button"
-            aria-controls={open ? 'notification-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
-            onClick={handleClick}
-          >
-            <Badge badgeContent={unreadCount} color="error">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-                    
-          <Menu
-            id="notification-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            MenuListProps={{
-              'aria-labelledby': 'notification-button',
-            }}
-            PaperProps={{
-              style: {
-                maxHeight: 400,
-                width: '350px',
-                overflowX: 'hidden'
-              },
-            }}
-          >
-            {notifs.length > 0 ? (
-              [...notifs].reverse().map((notif) => (
-                <MenuItem 
-                  key={notif._id} 
-                  onClick={() => handleNotificationClick(notif._id)} 
-                  sx={{ 
-                    width: '100%', 
-                    padding: 0.5,
-                    whiteSpace: 'normal',
-                    backgroundColor: notif.isRead ? 'inherit' : 'rgba(25, 118, 210, 0.08)'
-                  }}
-                  disableGutters
+            {/* Header Section */}
+            <div className="header-section">  
+              <div className="header-title-container">
+                <h1 className="header-title">  Welcome {user.username.charAt(0).toUpperCase() + user.username.slice(1)}!</h1>
+                <p className="header-subtitle">Here are your concepts</p>
+              </div>
+              
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <button
+                  className="notification-button"
+                  id="notification-button"
+                  aria-controls={open ? 'notification-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? 'true' : undefined}
+                  onClick={handleClick}
                 >
-                  <Alert 
-                    severity={notif.severity || "info"} 
-                    sx={{ width: '100%' }}
-                    variant="outlined"
-                  >
-                    {notif.message}
-                  </Alert>
-                </MenuItem>
-              ))
-            ) : (
-              <MenuItem>
-                <Typography sx={{ padding: 1 }}>No notifications</Typography>
-              </MenuItem>
-            )}
-          </Menu>          
-          
-          <h1>Welcome, {user.username}!</h1>              
-          <h2>Your role is: {user.role}</h2>              
-        </div>
-        
-        <div className="concepts-section"> 
-          <h2>Your Concepts:</h2>
-                    
-          <div className="concepts-list">
-            {Array.isArray(concepts) && concepts.map((concept) => (
-              <Card key={concept._id} sx={{ minWidth: 275, marginTop: 3, marginBottom: 3 }}>
-              
-              {/* Engineers have Edit access */}
-              { user.role === 'engineer' && 
-                <Link to={`/concept/${concept._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                  <CardContent>                              
-                    <Typography variant="h5" component="div">
-                      {concept.title}
-                    </Typography>
-                    <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>
-                      Status: {concept.status}
-                    </Typography>
-                    <Typography variant="body2">
-                      {concept.description}                                
-                    </Typography>
-                  </CardContent>
-                </Link>
-              }
-              
-              {/* Managers & Operationals dont have Edit access */}
-              { (user.role === 'manager' || user.role === 'operational') && 
-                  <CardContent>                              
-                    <Typography variant="h5" component="div">
-                      {concept.title}
-                    </Typography>
-                    <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>
-                      Status: {concept.status}
-                    </Typography>
-                    <Typography variant="body2">
-                      {concept.description}                                
-                    </Typography>
-                  </CardContent>
-              }
-
-              
-                <CardActions>
-                  {/* Engineer Actions */}
-                  {user.role === "engineer" && (
-                    <Button 
-                      color="error" 
-                      variant="contained"
-                      startIcon={<DeleteIcon />}
-                      size="small" 
-                      onClick={() => handleDelete(user._id, concept._id)}
-                      sx={{ mr: 1 }}
-                    >
-                      Delete
-                    </Button>
-                  )}
-                  
-                  {/* Manager Actions */}
-                  {user.role === "manager" && (
-                    <>
-                      <Button 
-                        color="success" 
-                        variant="contained"
-                        startIcon={<CheckCircleIcon />}
-                        size="small" 
-                        onClick={() => handleVote(user._id, concept._id, true)}
-                        sx={{ mr: 1 }}
-                      >
-                        Approve
-                      </Button>
-                      <Button 
-                        color="error" 
-                        variant="contained"
-                        startIcon={<DoNotDisturbIcon />}
-                        size="small" 
-                        onClick={() => handleVote(user._id, concept._id, false)}
-                      >
-                        Reject
-                      </Button>
-                    </>
-                  )}
-                  
-                  {/* Operational Actions */}
-                  {user.role === "operational" && (
-                    <>
-                      <Button 
-                        color="success" 
-                        variant="contained"
-                        startIcon={<CheckCircleIcon />}
-                        size="small" 
-                        onClick={() => handleStatusChange(user._id, concept._id, "done")}
-                        sx={{ mr: 1 }}
-                      >
-                        Mark as Done
-                      </Button>
-                      <Button 
-                        color="warning" 
-                        variant="contained"
-                        startIcon={<PendingIcon />}
-                        size="small" 
-                        onClick={() => handleStatusChange(user._id, concept._id, "in progress")}
-                        sx={{ mr: 1 }}
-                      >
-                        In Progress
-                      </Button>
-                      <Button 
-                        color="error" 
-                        variant="contained"
-                        startIcon={<DoNotDisturbIcon />}
-                        size="small" 
-                        onClick={() => handleStatusChange(user._id, concept._id, "not started")}
-                      >
-                        Not Started
-                      </Button>
-                    </>
-                  )}
-                </CardActions>
-              </Card>
+                  <Badge badgeContent={unreadCount} color="error">
+                    <NotificationsIcon />
+                  </Badge>
+                </button>
                 
-            ))}
-          
-          </div>                        
-        </div> 
-        
-        {user.role === "engineer" && (
-          <div className="add-concept-section">
-            <Link to='/add-concept'>                    
-              <Button 
-                size='large' 
-                variant="contained"
-                sx={{ mt: 2 }}
-              >
-                Add New Concept
-              </Button>
-            </Link>
-          </div>
-        )}
+                <div className="profile-avatar">
+                  {user.username?.charAt(0).toUpperCase()}
+                </div>
+              </div>
+            </div>
+
+            {/* Notification Menu */}
+            <Menu
+              id="notification-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                'aria-labelledby': 'notification-button',
+              }}
+              PaperProps={{
+                style: {
+                  maxHeight: 400,
+                  width: '350px',
+                  overflowX: 'hidden'
+                },
+              }}
+            >
+              {notifs.length > 0 ? (
+                [...notifs].reverse().map((notif) => (
+                  <MenuItem 
+                    key={notif._id} 
+                    onClick={() => handleNotificationClick(notif._id)} 
+                    sx={{ 
+                      width: '100%', 
+                      padding: 0.5,
+                      whiteSpace: 'normal',
+                      backgroundColor: notif.isRead ? 'inherit' : 'rgba(25, 118, 210, 0.08)'
+                    }}
+                    disableGutters
+                  >
+                    <Alert 
+                      severity={notif.severity || "info"} 
+                      sx={{ width: '100%' }}
+                      variant="outlined"
+                    >
+                      {notif.message}
+                    </Alert>
+                  </MenuItem>
+                ))
+              ) : (
+                <MenuItem>
+                  <div style={{ padding: '8px' }}>No notifications</div>
+                </MenuItem>
+              )}
+            </Menu>          
+            
+            {/* Concepts Section */}
+            <div className="concepts-section">                         
+              <div className="concepts-grid">
+                {Array.isArray(concepts) && concepts.length > 0 ? (
+                  concepts.map((concept) => (
+                    <div key={concept._id} className="concept-card">
+                      {/* Engineers have Edit access */}
+                      {user.role === 'engineer' && (
+                        <Link to={`/concept/${concept._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                          <div className="concept-header">
+                            <h3 className="concept-title">{concept.title}</h3>
+                            <span className={`concept-status ${getStatusClass(concept.status)}`}>
+                              {concept.status}
+                            </span>
+                          </div>
+                          <p className="concept-description">{concept.description}</p>
+                        </Link>
+                      )}
+                      
+                      {/* Managers & Operationals don't have Edit access */}
+                      {(user.role === 'manager' || user.role === 'operational') && (
+                        <>
+                          <div className="concept-header">
+                            <h3 className="concept-title">{concept.title}</h3>
+                            <span className={`concept-status ${getStatusClass(concept.status)}`}>
+                              {concept.status}
+                            </span>
+                          </div>
+                          <p className="concept-description">{concept.description}</p>
+                        </>
+                      )}
+
+                      <div className="concept-meta">
+                        <span className={`concept-priority ${getPriorityClass(concept.priority)}`}>
+                          {concept.priority || 'Medium'} Priority
+                        </span>
+                        <span className="concept-department">
+                          {getDepartment(concept)}
+                        </span>
+                      </div>
+                      
+                      <div className="concept-actions">
+                        {/* Engineer Actions */}
+                        {user.role === "engineer" && (
+                          <button 
+                            className="action-button danger"
+                            onClick={() => handleDelete(user._id, concept._id)}
+                          >
+                            <DeleteIcon style={{ fontSize: '16px' }} />
+                            Delete
+                          </button>
+                        )}
+                        
+                        {/* Manager Actions */}
+                        {user.role === "manager" && (
+                          <>
+                            <button 
+                              className="action-button success"
+                              onClick={() => handleVote(user._id, concept._id, true)}
+                            >
+                              <CheckCircleIcon style={{ fontSize: '16px' }} />
+                              Approve
+                            </button>
+                            <button 
+                              className="action-button danger"
+                              onClick={() => handleVote(user._id, concept._id, false)}
+                            >
+                              <DoNotDisturbIcon style={{ fontSize: '16px' }} />
+                              Reject
+                            </button>
+                          </>
+                        )}
+                        
+                        {/* Operational Actions */}
+                        {user.role === "operational" && (
+                          <>
+                            <button 
+                              className="action-button success"
+                              onClick={() => handleStatusChange(user._id, concept._id, "done")}
+                            >
+                              <CheckCircleIcon style={{ fontSize: '16px' }} />
+                              Done
+                            </button>
+                            <button 
+                              className="action-button warning"
+                              onClick={() => handleStatusChange(user._id, concept._id, "in progress")}
+                            >
+                              <PendingIcon style={{ fontSize: '16px' }} />
+                              In Progress
+                            </button>
+                            <button 
+                              className="action-button danger"
+                              onClick={() => handleStatusChange(user._id, concept._id, "not started")}
+                            >
+                              <DoNotDisturbIcon style={{ fontSize: '16px' }} />
+                              Not Started
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="empty-state">
+                    <h3>No concepts found</h3>
+                    <p>You don't have any concepts assigned to you yet.</p>
+                  </div>
+                )}
+              </div>                        
+            </div> 
+            
+            {user.role === "engineer" && (
+              <div className="add-concept-section">
+                <Link to='/add-concept' style={{ textDecoration: 'none' }}>                    
+                  <button className="add-concept-button">
+                    <AddIcon style={{ fontSize: '20px' }} />
+                    Add New Concept
+                  </button>
+                </Link>
+              </div>
+            )}
           </>
         )}               
       </div>
