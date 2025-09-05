@@ -9,6 +9,9 @@
   --background: #FFFFFF;
   --card-background: #FFFFFF;
   --highlight: #F2F3F7;
+  --background-color: #F7F5F4;
+  --card-background-color: #FFFFFF;
+  --text-color: #1A2A4F;
   
   /* Typography */
   --font-family: 'Inter', sans-serif;
@@ -52,21 +55,22 @@
 
 body {
   font-family: var(--font-family);
-  background-color: var(--secondary);
-  color: var(--text-primary);  
+  background-color: var(--background-color);
+  color: var(--text-color);  
 }
 
 /* Main Layout */
 .homepage-section {
   min-height: 100vh;
-  background-color: var(--secondary);
+  background-color: var(--background-color);
 }
 
 /* Main Content */
 .main-content {
   width: 100%;
   padding: 25px;
-  background-color: var(--secondary);
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
 
 /* Header */
@@ -87,7 +91,7 @@ body {
 .header-title {
   font-size: var(--font-size-h1);
   font-weight: var(--font-weight-bold);
-  color: var(--text-primary);
+  color: var(--text-color);
   margin: 0;
 }
 
@@ -128,13 +132,14 @@ body {
 
 /* Concept Card */
 .concept-card {
-  background-color: var(--card-background);
+  background-color: var(--card-background-color);
   border-radius: var(--border-radius-md);
   box-shadow: var(--shadow-card);
   padding: var(--spacing-md);
   transition: all 0.2s ease;
   cursor: pointer;
   border: 1px solid rgba(0, 0, 0, 0.05);
+  color: var(--card-text-color);
 }
 
 .concept-card:hover {
@@ -282,7 +287,7 @@ body {
 
 .add-concept-button {
   background-color: var(--accent);
-  color: white;
+  color: #fff;
   border: none;
   padding: var(--spacing-md) var(--spacing-lg);
   border-radius: var(--border-radius-md);

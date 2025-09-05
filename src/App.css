@@ -44,10 +44,6 @@
 }
 
 
-
-
-
-
 .app-container {
   display: flex;
   min-height: 100vh;
@@ -64,4 +60,6 @@
 
 .content-container {
   flex: 1;
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
