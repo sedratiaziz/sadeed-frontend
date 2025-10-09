@@ -14,6 +14,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { authContext } from '../context/AuthContext';
 import axios from 'axios';
+import '../../public/styles/ConceptDetails.css';
 
 function ConceptDetails() {
     const {user} = useContext(authContext)
@@ -89,116 +90,55 @@ const handleOperationalClose = () => {
 
 
   return (
-    <>
-        <Box component="section" sx={{ p: 2, border: '1px dashed grey' }}>
-            <Typography variant='h2'>{conceptDetails.title}</Typography>
-            <Box component="div" sx={{ p: 2, border: '1px dashed grey' }}>
-                
-                    <Box component="div" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', p: 2, border: '1px dashed grey' }}>
-                        <Typography variant="h5" component="div">
-                            Selected Managers: 
-                        </Typography>
-                        <FormGroup  name='managers' sx={{display: 'flex', flexDirection: 'column'}}>                              
-                                <Button
-                                  id="managers-button"
-                                  aria-controls={managerMenuOpen ? 'managers-menu' : undefined}
-                                  aria-haspopup="true"
-                                  aria-expanded={managerMenuOpen ? 'true' : undefined}
-                                  onClick={handleManagerClick}
-                                >
-                                  View
-                                </Button>
-                                <Menu
-                                  id="managers-menu"
-                                  anchorEl={managerAnchorEl}
-                                  open={managerMenuOpen}
-                                  onClose={handleManagerClose}
-                                  MenuListProps={{
-                                    'aria-labelledby': 'managers-button',
-                                  }}
-                                >                                  
-                                                              
-                                {conceptDetails.selectedManagers && conceptDetails.selectedManagers.map((manager)=>
-                                  <MenuItem key={manager._id} onClick={handleManagerClose} sx={{ cursor: 'default' }}>
-                                    <Typography>{manager.username}</Typography>                                    
-                                  </MenuItem>
-                                )}
-                                </Menu>                                                         
-                        </FormGroup>
-                    </Box>   
-
-                    <Box component="div" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', p: 2, border: '1px dashed grey' }}>
-                        <Typography variant="h5" component="div">
-                            Selected Operationals: 
-                        </Typography>
-                        <FormGroup  name="operationals" sx={{display: 'flex', flexDirection: 'column'}}>                            
-                        <Button
-                                  id="operational-button"
-                                  aria-controls={operationalMenuOpen ? 'operational-menu' : undefined}
-                                  aria-haspopup="true"
-                                  aria-expanded={operationalMenuOpen ? 'true' : undefined}
-                                  onClick={handleOperationalClick}
-                                >
-                                  View
-                                </Button>
-                                <Menu
-                                  id="operational-menu"
-                                  anchorEl={operationalAnchorEl}
-                                  open={operationalMenuOpen}
-                                  onClose={handleOperationalClose}
-                                  MenuListProps={{
-                                    'aria-labelledby': 'operational-button',
-                                  }}
-                                >
-                                {conceptDetails.selectedOperational && conceptDetails.selectedOperational.map((operational)=>
-                                  <MenuItem key={operational._id} onClick={handleOperationalClose} sx={{ cursor: 'default' }}>
-                                    <Typography>{operational.username}</Typography>                                    
-                                  </MenuItem>
-                                )}
-                                </Menu> 
-                        </FormGroup>
-                    </Box>  
-
-                    <Box component="div" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', p: 2, border: '1px dashed grey' }}>
-                        <Typography variant="h5" component="div">
-                                Description: 
-                        </Typography>
-                        <Typography variant="h5" component="div">
-                                {conceptDetails.description} 
-                        </Typography>
-                    </Box>    
-                    
-                    <Box component="div" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', p: 2, border: '1px dashed grey' }}>
-                        <Typography variant="h5" component="div">
-                                Status: 
-                        </Typography>
-                        <Typography variant="h5" component="div">
-                                {conceptDetails.status} 
-                        </Typography>
-                    </Box>    
-                    
-                    <Box component="div" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', p: 2, border: '1px dashed grey' }}>
-                        <Typography variant="h5" component="div">
-                                Approval: 
-                        </Typography>
-                        <Typography variant="h5" component="div">
-                            {conceptDetails.isAproved ? "Approved" : "Not Approved"}  
-                        </Typography>
-                    </Box>
-                    <Link to={`/concept/${id}/edit-concept`}>
-                        <Button size='large' variant="contained" 
-                                sx={{ 
-                                '&:focus': { outline: 'none' },
-                                '&:focus-visible': { outline: 'none' },
-                                '&:active': { outline: 'none' }
-                                }}
-                        >Edit Concept?</Button>                    
-                    </Link>                                                        
-
-            </Box>
-        </Box> 
-    </>
-  )
+  <section className="concept-details-section">
+    <h2 className="concept-details-title">{conceptDetails.title}</h2>
+    <div className="concept-details-content">
+      <div className="concept-details-row">
+        <span className="concept-details-label">Selected Managers:</span>
+        <span className="concept-details-value">
+          {(conceptDetails.selectedManagers || []).map(m => m.username).join(', ') || '-'}
+        </span>
+      </div>
+      <div className="concept-details-row">
+        <span className="concept-details-label">Selected Operationals:</span>
+        <span className="concept-details-value">
+          {(conceptDetails.selectedOperational || []).map(o => o.username).join(', ') || '-'}
+        </span>
+      </div>
+      <div className="concept-details-row">
+        <span className="concept-details-label">Description:</span>
+        <span className="concept-details-value">{conceptDetails.description || '-'}</span>
+      </div>
+      <div className="concept-details-row">
+        <span className="concept-details-label">Status:</span>
+        <span
+          className="concept-details-status"
+          data-status={conceptDetails.status?.toLowerCase()}
+        >
+          {conceptDetails.status || '-'}
+        </span>
+      </div>
+      <div className="concept-details-row">
+        <span className="concept-details-label">Approval:</span>
+        <span
+          className="concept-details-approval"
+          data-approved={conceptDetails.isAproved ? "true" : "false"}
+        >
+          {conceptDetails.isAproved ? "Approved" : "Not Approved"}
+        </span>
+      </div>
+      <Link to={`/concept/${id}/edit-concept`}>
+        <Button
+          size="large"
+          variant="contained"
+          className="concept-details-edit-btn"
+        >
+          Edit Concept
+        </Button>
+      </Link>
+    </div>
+  </section>
+);
 }
 
 export default ConceptDetails
