@@ -25,6 +25,8 @@ const [theme, setTheme] = useState(() => {
   return isDarkTheme ? 'dark' : 'light';
 });
 
+// small edit for git push!
+
 // Create themes
 const darkTheme = createTheme({
   palette: {
