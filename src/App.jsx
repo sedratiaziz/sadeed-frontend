@@ -25,6 +25,8 @@ const [theme, setTheme] = useState(() => {
   return isDarkTheme ? 'dark' : 'light';
 });
 
+// small edit for git push!
+
 // Create themes
 const darkTheme = createTheme({
   palette: {
@@ -57,12 +59,31 @@ useEffect(() => {
               
 useEffect(() => {
   const root = document.documentElement;
+  const contentContainer = document.querySelector('.content-container');
   if (theme === 'light') {
     root.style.setProperty('--background-color', '#f7f5f4');
     root.style.setProperty('--text-color', '#213547');
+    root.style.setProperty('--card-background-color', '#ffffff');
+    root.style.setProperty('--card-text-color', '#ed1a1aff');
+    root.style.setProperty('--button-background-color', '#1A2A4F');
+    root.style.setProperty('--button-text-color', '#fff');
+
+    if (contentContainer) {
+      contentContainer.style.setProperty('--background-color', '#f7f5f4');
+      contentContainer.style.setProperty('--text-color', '#213547');
+    }
   } else {
-    root.style.setProperty('--background-color', '#242424');
+    root.style.setProperty('--background-color', '#181A20');
     root.style.setProperty('--text-color', 'rgba(255, 255, 255, 0.87)');
+    root.style.setProperty('--card-background-color', '#23263a');
+    root.style.setProperty('--card-text-color', 'rgba(255,255,255,0.95)');
+    root.style.setProperty('--button-background-color', '#213547');
+    root.style.setProperty('--button-text-color', '#fff');
+
+    if (contentContainer) {
+      contentContainer.style.setProperty('--background-color', '#181A20');
+      contentContainer.style.setProperty('--text-color', 'rgba(255, 255, 255, 0.87)');
+    }
   }
 }, [theme]);
 

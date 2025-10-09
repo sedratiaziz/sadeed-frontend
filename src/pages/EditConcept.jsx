@@ -4,16 +4,7 @@ import { useContext } from 'react';
 import { authContext } from '../context/AuthContext'
 import axios from 'axios';
 
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
-import { Typography } from '@mui/material';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Button from '@mui/material/Button';
+import '../../public/styles/EditConcept.css';
 
 
 
@@ -197,60 +188,69 @@ console.log("formData: ", formData)
 
 
   return (
-    <>
-        <Box component="section" sx={{ p: 2, border: '1px dashed grey' }}>
-            <Typography variant='h2'>Edit Concept</Typography>
-            <Box component="div" sx={{ p: 2, border: '1px dashed grey' }}>
-                
-                <form onSubmit={handleSubmit}>
-                    <Box component="div" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', p: 2, border: '1px dashed grey' }}>
-                        <Typography variant="h5" component="div">
-                                Title: 
-                        </Typography>
-                        <TextField required onChange={handleChange} name='title' value={formData.title} label="Your Concept's Title" variant="filled" />
-                    </Box>
-
-                    <Box component="div" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', p: 2, border: '1px dashed grey' }}>
-                        <Typography variant="h5" component="div">
-                            Selected Managers: 
-                        </Typography>
-                        <FormGroup required value={formData.managers} name='managers' sx={{display: 'flex', flexDirection: 'column'}}>
-                            {managers.map((manager)=>
-                                <FormControlLabel key={manager._id} control={<Checkbox onChange={(e)=>handleManagerCheckboxChange(e, manager._id)} checked={formData.selectedManagers.includes(manager._id)} />} label={manager.username} />
-                            )} 
-                        </FormGroup>
-                    </Box>   
-
-                    <Box component="div" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', p: 2, border: '1px dashed grey' }}>
-                        <Typography variant="h5" component="div">
-                            Selected Operationals: 
-                        </Typography>
-                        <FormGroup required value={formData.operationals} name="operationals" sx={{display: 'flex', flexDirection: 'column'}}>
-                            {operationals.map((operational)=>
-                                <FormControlLabel key={operational.id} control={<Checkbox onChange={(e)=>handleOperationalCheckboxChange(e, operational._id)} checked={formData.selectedOperational.includes(operational._id)} />} label={operational.username} />
-                            )} 
-                        </FormGroup>
-                    </Box>  
-
-                    <Box component="div" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', p: 2, border: '1px dashed grey' }}>
-                        <Typography variant="h5" component="div">
-                                Description: 
-                        </Typography>
-                        <TextField onChange={handleChange} name='description' value={formData.description} label="Description (optional)" variant="filled" />
-                    </Box>    
-                                        
-                        <Button type='submit' size='large' variant="contained" 
-                                    sx={{ 
-                                    '&:focus': { outline: 'none' },
-                                    '&:focus-visible': { outline: 'none' },
-                                    '&:active': { outline: 'none' }
-                                    }}
-                            >Save Changes</Button>                    
-                </form>
-
-            </Box>
-        </Box>
-    </>
+  <section className="edit-concept-section">
+    <h2 className="edit-concept-title">Edit Concept</h2>
+    <form className="edit-concept-form" onSubmit={handleSubmit}>
+      <div className="edit-concept-row">
+        <label className="edit-concept-label">Title:</label>
+        <input
+          className="edit-concept-input"
+          required
+          onChange={handleChange}
+          name="title"
+          value={formData.title}
+          placeholder="Your Concept's Title"
+        />
+      </div>
+      <div className="edit-concept-row">
+        <label className="edit-concept-label">Selected Managers:</label>
+        <div className="edit-concept-checkbox-group">
+          {managers.map((manager) =>
+            manager._id ? (
+              <label key={manager._id} className="edit-concept-checkbox-label">
+                <input
+                  type="checkbox"
+                  onChange={(e) => handleManagerCheckboxChange(e, manager._id)}
+                  checked={formData.selectedManagers.includes(manager._id)}
+                />
+                {manager.username}
+              </label>
+            ) : null
+          )}
+        </div>
+      </div>
+      <div className="edit-concept-row">
+        <label className="edit-concept-label">Selected Operationals:</label>
+        <div className="edit-concept-checkbox-group">
+          {operationals.map((operational) =>
+            operational._id ? (
+              <label key={operational._id} className="edit-concept-checkbox-label">
+                <input
+                  type="checkbox"
+                  onChange={(e) => handleOperationalCheckboxChange(e, operational._id)}
+                  checked={formData.selectedOperational.includes(operational._id)}
+                />
+                {operational.username}
+              </label>
+            ) : null
+          )}
+        </div>
+      </div>
+      <div className="edit-concept-row">
+        <label className="edit-concept-label">Description:</label>
+        <textarea
+          className="edit-concept-textarea"
+          onChange={handleChange}
+          name="description"
+          value={formData.description}
+          placeholder="Description (optional)"
+        />
+      </div>
+      <button type="submit" className="edit-concept-submit-btn">
+        Save Changes
+      </button>
+    </form>
+  </section>
   )
 }
 

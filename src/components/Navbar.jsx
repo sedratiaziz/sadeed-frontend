@@ -39,7 +39,7 @@ function Navbar(props) {
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
             {user && (
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <h3>*  {user.role} *</h3>
+                <h3>{user.role.charAt(0).toUpperCase() + user.role.slice(1)}</h3>
               </Box>
             )}                    
           </Box>       
