@@ -32,7 +32,7 @@ function ConceptDetails() {
     
     async function getConceptDetails() {
       try {
-        const fetchedConceptDetails = await axios.get(`http://localhost:3000/${user._id}/concept/${id}`, {headers: {Authorization: `Bearer ${token}`}})
+        const fetchedConceptDetails = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/${user._id}/concept/${id}`, {headers: {Authorization: `Bearer ${token}`}})
         setConceptDetails(fetchedConceptDetails.data)  
         
       } catch (error) {
