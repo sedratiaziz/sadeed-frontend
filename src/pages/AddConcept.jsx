@@ -27,8 +27,9 @@ function AddConcept() {
 
         async function getAllManagers() {
           try {            
-            const fetchedManagers = await axios.get("http://localhost:3000/managers/", {headers: {Authorization: `Bearer ${token}`}})
-              setManagers(fetchedManagers.data) 
+            const fetchedManagers = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/managers/`, {headers: {Authorization: `Bearer ${token}`}})
+            console.log(fetchedManagers)  
+            setManagers(fetchedManagers.data) 
                        
           } catch (error) {
             console.log(error)
@@ -42,7 +43,7 @@ function AddConcept() {
 
          async function getAllOperationals() {
           try {            
-            const fetchedOperationals = await axios.get("http://localhost:3000/operationals/", {headers: {Authorization: `Bearer ${token}`}})
+            const fetchedOperationals = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/operationals/`, {headers: {Authorization: `Bearer ${token}`}})
               setOperationals(fetchedOperationals.data) 
                        
           } catch (error) {
@@ -96,7 +97,7 @@ const handleOperationalCheckboxChange = (event, operationalId) => {
 //     async function handleSubmit(event) {
 //     event.preventDefault()
 
-//     await axios.post(`http://localhost:3000/`, formData, {headers:{Authorization:`Bearer ${token}`}})
+//     await axios.post(`${import.meta.env.VITE_BACKEND_URL}/`, formData, {headers:{Authorization:`Bearer ${token}`}})
 
 //     navigate('/')
 //     setFormData({
@@ -129,7 +130,7 @@ async function handleSubmit(event) {
   }
   
   try {
-    await axios.post(`http://localhost:3000/`, formData, {headers: {Authorization: `Bearer ${token}`}});            
+    await axios.post(`${import.meta.env.VITE_BACKEND_URL}/`, formData, {headers: {Authorization: `Bearer ${token}`}});            
   } catch (error) {
     console.error("Error details:", error.response?.data || error.message);
   }

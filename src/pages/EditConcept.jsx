@@ -22,7 +22,7 @@ function EditConcept() {
    
       async function getConceptDetails() {
         try {
-            const fetchedConceptDetails = await axios.get(`http://localhost:3000/${user._id}/concept/${id}`, {headers: {Authorization: `Bearer ${token}`}})
+            const fetchedConceptDetails = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/${user._id}/concept/${id}`, {headers: {Authorization: `Bearer ${token}`}})
             setConceptDetails(fetchedConceptDetails.data)   
             console.log(fetchedConceptDetails)
             
@@ -54,7 +54,7 @@ function EditConcept() {
 
         async function getAllManagers() {
           try {            
-            const fetchedManagers = await axios.get("http://localhost:3000/managers/", {headers: {Authorization: `Bearer ${token}`}})
+            const fetchedManagers = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/managers/`, {headers: {Authorization: `Bearer ${token}`}})
               setManagers(fetchedManagers.data) 
                        
           } catch (error) {
@@ -69,7 +69,7 @@ function EditConcept() {
 
          async function getAllOperationals() {
           try {            
-            const fetchedOperationals = await axios.get("http://localhost:3000/operationals/", {headers: {Authorization: `Bearer ${token}`}})
+            const fetchedOperationals = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/operationals/`, {headers: {Authorization: `Bearer ${token}`}})
               setOperationals(fetchedOperationals.data) 
                        
           } catch (error) {
@@ -143,7 +143,7 @@ async function handleSubmit(event) {
   }
   
   try {
-    await axios.put(`http://localhost:3000/${user._id}/concept/${id}`, formData, {headers: {Authorization: `Bearer ${token}`}});            
+    await axios.put(`${import.meta.env.VITE_BACKEND_URL}/${user._id}/concept/${id}`, formData, {headers: {Authorization: `Bearer ${token}`}});            
   } catch (error) {
     console.error("Error details:", error.response?.data || error.message);
   }
@@ -164,7 +164,7 @@ console.log("formData: ", formData)
 // async function handleEdit() {
 //     try {
       
-//       await axios.put(`http://localhost:3000/${user._id}/concept/${id}`, {headers: {Authorization: `Bearer ${token}`}});
+//       await axios.put(`import.meta.env.VITE_BACKEND_URL/${user._id}/concept/${id}`, {headers: {Authorization: `Bearer ${token}`}});
       
 //       navigate('/'); // Redirect to homepage after successful deletion
     

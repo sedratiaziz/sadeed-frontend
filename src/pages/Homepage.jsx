@@ -59,9 +59,9 @@ function Homepage(props) {
       let url;
       
       if (user.role === "engineer") {
-        url = "http://localhost:3000/"; 
+        url = import.meta.env.VITE_BACKEND_URL; 
       } else if (user.role === "manager" || user.role === "operational") {
-        url = "http://localhost:3000/assigned";
+        url = `${import.meta.env.VITE_BACKEND_URL}/assigned`;
       }
       
       const fetchedConcepts = await axios.get(url, { headers: { Authorization: `Bearer ${token}` } });
@@ -83,7 +83,7 @@ function Homepage(props) {
   async function getNotifications() {
     try {
       setIsLoading(true);
-      const fetchedNotifications = await axios.get(`http://localhost:3000/${user._id}/notifications`, { 
+      const fetchedNotifications = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/${user._id}/notifications`, { 
         headers: { Authorization: `Bearer ${token}` } 
       });
       setNotifs(fetchedNotifications.data);  
@@ -104,7 +104,7 @@ function Homepage(props) {
   const markAsRead = async (notificationId) => {
     try {
       await axios.put(
-        `http://localhost:3000/${user._id}/notifications/${notificationId}`, 
+        `${import.meta.env.VITE_BACKEND_URL}/${user._id}/notifications/${notificationId}`, 
         {}, 
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -126,7 +126,7 @@ function Homepage(props) {
   async function handleDelete(userId, conceptId) {
     try {
       await axios.delete(
-        `http://localhost:3000/${userId}/concept/${conceptId}`, 
+        `${import.meta.env.VITE_BACKEND_URL}/${userId}/concept/${conceptId}`, 
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setConcepts(prevConcepts => prevConcepts.filter(concept => concept._id !== conceptId));
@@ -142,7 +142,7 @@ function Homepage(props) {
   async function handleVote(userId, conceptId, voteStatus) {
     try {
       await axios.put(
-        `http://localhost:3000/manager/${userId}/concept/${conceptId}/vote`,  
+        `${import.meta.env.VITE_BACKEND_URL}/manager/${userId}/concept/${conceptId}/vote`,  
         { vote: voteStatus }, 
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -156,7 +156,7 @@ function Homepage(props) {
   async function handleStatusChange(userId, conceptId, newStatus) {
     try {
       
-      const response = await axios.put(`http://localhost:3000/${userId}/concept/${conceptId}/status`, { status: newStatus }, { headers: { Authorization: `Bearer ${token}` }});
+      const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/${userId}/concept/${conceptId}/status`, { status: newStatus }, { headers: { Authorization: `Bearer ${token}` }});
       
       // Refresh concepts after status change
       getAllConcepts();
