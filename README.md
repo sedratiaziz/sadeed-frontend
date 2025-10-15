@@ -151,5 +151,5 @@ We welcome contributions! Please open issues, suggest features, or submit pull r
 Need support or have ideas? [Open an issue](https://github.com/sedratiaziz/sadeed-backend/issues) or reach out via GitHub Discussions.
 
 ---
-
+chng1
 **Sadeed – Empowering structured innovation.** 💡
