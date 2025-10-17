@@ -56,15 +56,9 @@ function Homepage(props) {
   async function getAllConcepts() {
     try {
       setIsLoading(true);
-      let url;
       
-      if (user.role === "engineer") {
-        url = import.meta.env.VITE_BACKEND_URL; 
-      } else if (user.role === "manager" || user.role === "operational") {
-        url = `${import.meta.env.VITE_BACKEND_URL}/assigned`;
-      }
-      
-      const fetchedConcepts = await axios.get(url, { headers: { Authorization: `Bearer ${token}` } });
+      const fetchedConcepts = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/`, { headers: { Authorization: `Bearer ${token}` } });
+      console.log(fetchedConcepts.data)
       setConcepts(fetchedConcepts.data);      
     } catch (error) {
       console.log(error);
