@@ -20,6 +20,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PendingIcon from '@mui/icons-material/Pending';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DoNotDisturbIcon from '@mui/icons-material/DoNotDisturb';
+import { colors } from '@mui/material';
 
 
 function Homepage(props) {
@@ -33,8 +34,24 @@ function Homepage(props) {
   
  
   const [isLoading, setIsLoading] = useState(true);
-  
-            
+
+  useEffect(()=>{  
+    // makeing the delete button elevated (by increasing the z-index value higher than the parent card element)
+    const parent = document.querySelector('.concept-card');
+    const child = document.querySelector('.danger');
+    
+    if (!parent || !child)
+      return;
+
+    const parentZ = window.getComputedStyle(parent).zIndex;
+    child.style.zIndex = (parseInt(parentZ) || 0) + 10;
+                
+
+  }, [])
+
+
+
+
   // Notification menu state
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -183,26 +200,8 @@ function Homepage(props) {
     }
   };
 
-  // Helper function to get priority class
-  const getPriorityClass = (priority) => {
-    switch (priority?.toLowerCase()) {
-      case 'high':
-        return 'priority-high';
-      case 'medium':
-        return 'priority-medium';
-      case 'low':
-        return 'priority-low';
-      default:
-        return 'priority-medium';
-    }
-  };
 
-  // Helper function to get department
-  const getDepartment = (concept) => {
-    // You can customize this based on your concept structure
-    return concept.department || 'Development';
-  };
-
+  
   return (    
     <section className="homepage-section">
       
@@ -295,40 +294,25 @@ function Homepage(props) {
               <div className="concepts-grid">
                 {Array.isArray(concepts) && concepts.length > 0 ? (
                   concepts.map((concept) => (
+                    <>
+
+
+                                  
                     <div key={concept._id} className="concept-card">
-                      {/* Engineers have Edit access */}
-                      {user.role === 'engineer' && (
-                        <Link to={`/concept/${concept._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                      <Link to={`/concept/${concept._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>  
+                                   
                           <div className="concept-header">
                             <h3 className="concept-title">{concept.title}</h3>
                             <span className={`concept-status ${getStatusClass(concept.status)}`}>
                               {concept.status}
                             </span>
                           </div>
-                          <p className="concept-description">{concept.description}</p>
-                        </Link>
-                      )}
-                      
-                      {/* Managers & Operationals don't have Edit access */}
-                      {(user.role === 'manager' || user.role === 'operational') && (
-                        <>
-                          <div className="concept-header">
-                            <h3 className="concept-title">{concept.title}</h3>
-                            <span className={`concept-status ${getStatusClass(concept.status)}`}>
-                              {concept.status}
-                            </span>
-                          </div>
-                          <p className="concept-description">{concept.description}</p>
-                        </>
-                      )}
+                          <p className="concept-description">{concept.description}</p>                     
 
                       <div className="concept-meta">
-                        <span className={`concept-priority ${getPriorityClass(concept.priority)}`}>
-                          {concept.priority || 'Medium'} Priority
-                        </span>
-                        <span className="concept-department">
-                          {getDepartment(concept)}
-                        </span>
+                        <span className={`concept-priority`}>
+                          {concept.isAproved ? (<span style={{color: 'green'}}>Approved</span>) : (<span>Rejected</span>)}
+                        </span>                        
                       </div>
                       
                       <div className="concept-actions">
@@ -336,7 +320,10 @@ function Homepage(props) {
                         {user.role === "engineer" && (
                           <button 
                             className="action-button danger"
-                            onClick={() => handleDelete(user._id, concept._id)}
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              handleDelete(user._id, concept._id)
+                            }}
                           >
                             <DeleteIcon style={{ fontSize: '16px' }} />
                             Delete
@@ -348,14 +335,20 @@ function Homepage(props) {
                           <>
                             <button 
                               className="action-button success"
-                              onClick={() => handleVote(user._id, concept._id, true)}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                handleVote(user._id, concept._id, true)
+                              }}
                             >
                               <CheckCircleIcon style={{ fontSize: '16px' }} />
                               Approve
                             </button>
                             <button 
                               className="action-button danger"
-                              onClick={() => handleVote(user._id, concept._id, false)}
+                               onClick={(event) => {
+                                event.stopPropagation();
+                                handleVote(user._id, concept._id, false)
+                              }}
                             >
                               <DoNotDisturbIcon style={{ fontSize: '16px' }} />
                               Reject
@@ -368,21 +361,30 @@ function Homepage(props) {
                           <>
                             <button 
                               className="action-button success"
-                              onClick={() => handleStatusChange(user._id, concept._id, "done")}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                handleStatusChange(user._id, concept._id, "done")
+                              }}
                             >
                               <CheckCircleIcon style={{ fontSize: '16px' }} />
                               Done
                             </button>
                             <button 
                               className="action-button warning"
-                              onClick={() => handleStatusChange(user._id, concept._id, "in progress")}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                handleStatusChange(user._id, concept._id, "in progress")
+                              }}
                             >
                               <PendingIcon style={{ fontSize: '16px' }} />
                               In Progress
                             </button>
                             <button 
                               className="action-button danger"
-                              onClick={() => handleStatusChange(user._id, concept._id, "not started")}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                handleStatusChange(user._id, concept._id, "not started")
+                              }}
                             >
                               <DoNotDisturbIcon style={{ fontSize: '16px' }} />
                               Not Started
@@ -390,7 +392,11 @@ function Homepage(props) {
                           </>
                         )}
                       </div>
+                    
+                    </Link>
                     </div>
+
+                    </>
                   ))
                 ) : (
                   <div className="empty-state">
