@@ -250,7 +250,7 @@ body {
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-xs);  
 }
 
 .action-button:hover {
@@ -277,6 +277,7 @@ body {
   background-color: #F44336;
   color: white;
 }
+
 
 /* Add Concept Section */
 .add-concept-section {

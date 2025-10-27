@@ -127,15 +127,29 @@ const handleOperationalClose = () => {
           {conceptDetails.isAproved ? "Approved" : "Not Approved"}
         </span>
       </div>
-      <Link to={`/concept/${id}/edit-concept`}>
+
+      {user.role === "engineer" ? (      
+        
+        <Link to={`/concept/${id}/edit-concept`}>
+          <Button
+            size="large"
+            variant="contained"
+            className="concept-details-edit-btn"
+          >
+            Edit Concept
+          </Button>
+        </Link>
+        
+      ) : (
         <Button
-          size="large"
-          variant="contained"
-          className="concept-details-edit-btn"
-        >
-          Edit Concept
-        </Button>
-      </Link>
+            size="large"
+            variant="contained"
+            className="concept-details-edit-btn"
+          >
+            Download WBS (Work Breakdown Structure)
+          </Button>
+      )}
+      
     </div>
   </section>
 );
